@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourdough Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #e2e8f0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.95em;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background-color: #f7fafc;
+        }
+
+        input[type="text"]:hover,
+        input[type="number"]:hover,
+        textarea:hover,
+        select:hover {
+            border-color: #cbd5e0;
+            background-color: white;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        ::placeholder {
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: right; margin-bottom: 20px;">
+            <a href="index.html" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">← Back to Home</a>
+        </div>
+        <h1>🍞 Sourdough Tracker</h1>
+        <p class="subtitle">Track your sourdough bread making variables and results</p>
+
+        <form id="sourdoughForm">
+            <h2>Making Process Variables</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="feedFlour">Feed - Flour</label>
+                    <input type="text" id="feedFlour" name="feedFlour" placeholder="e.g., 100g bread flour">
+                </div>
+
+                <div class="form-group">
+                    <label for="feedWater">Feed - Water</label>
+                    <input type="text" id="feedWater" name="feedWater" placeholder="e.g., 100g water">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="feedTime">Time for Feed to Finish</label>
+                    <input type="text" id="feedTime" name="feedTime" placeholder="e.g., 4 hours">
+                </div>
+
+                <div class="form-group">
+                    <label for="feedRisePercent">% Risen from Original Height (Feed)</label>
+                    <input type="number" id="feedRisePercent" name="feedRisePercent" min="0" max="500" placeholder="e.g., 100">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="riseTime">Time to Rise</label>
+                    <input type="text" id="riseTime" name="riseTime" placeholder="e.g., 6 hours">
+                </div>
+
+                <div class="form-group">
+                    <label for="risePercent">% Risen from Original Height (Rise)</label>
+                    <input type="number" id="risePercent" name="risePercent" min="0" max="500" placeholder="e.g., 50">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="stretchCount">How Many Times Stretched</label>
+                    <input type="number" id="stretchCount" name="stretchCount" min="0" placeholder="e.g., 4">
+                </div>
+
+                <div class="form-group">
+                    <label for="timeLeftRisen">Time Left Once Risen</label>
+                    <input type="text" id="timeLeftRisen" name="timeLeftRisen" placeholder="e.g., 2 hours">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cookingTimeLidOn">Cooking Time with Lid On</label>
+                    <input type="text" id="cookingTimeLidOn" name="cookingTimeLidOn" placeholder="e.g., 20 minutes">
+                </div>
+
+                <div class="form-group">
+                    <label for="cookingTimeLidOff">Cooking Time with Lid Off</label>
+                    <input type="text" id="cookingTimeLidOff" name="cookingTimeLidOff" placeholder="e.g., 25 minutes">
+                </div>
+            </div>
+
+            <h2>Results</h2>
+
+            <div class="form-group">
+                <label for="overall">Overall Rating</label>
+                <select id="overall" name="overall">
+                    <option value="">Select rating...</option>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Below Average</option>
+                    <option value="1">1 - Poor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="taste">Taste</label>
+                <textarea id="taste" name="taste" rows="3" placeholder="Describe the taste..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="textureBread">Texture of Bread</label>
+                <textarea id="textureBread" name="textureBread" rows="3" placeholder="Describe the bread texture (crumb, airiness, etc.)..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="textureCrust">Texture of Crust</label>
+                <textarea id="textureCrust" name="textureCrust" rows="3" placeholder="Describe the crust texture..."></textarea>
+            </div>
+
+            <button type="submit">Save Bread Entry</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('sourdoughForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Add timestamp
+            data.date = new Date().toLocaleString();
+
+            // Get existing entries from localStorage
+            const entries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
+
+            // Add new entry
+            entries.push(data);
+
+            // Save back to localStorage
+            localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
+
+            // Show success message
+            alert('Entry saved successfully! 🍞');
+
+            // Reset the form
+            this.reset();
+
+            // Optionally redirect to results page
+            if (confirm('Would you like to view all your results?')) {
+                window.location.href = 'results.html';
+            }
+        });
+    </script>
+</body>
+</html>
