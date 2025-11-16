@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sourdough Tracker</title>
+    <title>Add Sourdough Entry</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,41 +12,75 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f9f7f4;
             min-height: 100vh;
             padding: 40px 20px;
-            line-height: 1.6;
+            line-height: 1.8;
+            color: #0d0d0e;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
             background-color: white;
-            padding: 50px;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px 70px;
+            border-radius: 2px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #d4c5b0;
+        }
+
+        .back-link {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            background-color: #7f96a0;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .back-link a:hover {
+            background-color: #6a8089;
+            transform: translateY(-1px);
         }
 
         h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #6b5744;
+            font-size: 2.8em;
             margin-bottom: 10px;
             text-align: center;
-            font-size: 2.5em;
-            font-weight: 700;
+            font-weight: normal;
+            font-style: italic;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f96a0;
+            margin-bottom: 40px;
+            font-size: 1.1em;
         }
 
         h2 {
-            color: #2d3748;
+            color: #6b5744;
             margin-top: 40px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 3px solid #e2e8f0;
-            font-size: 1.5em;
-            font-weight: 600;
+            border-bottom: 2px solid #d4c5b0;
+            font-size: 1.6em;
+            font-weight: normal;
+            font-style: italic;
         }
 
         .form-group {
@@ -59,40 +93,44 @@
             color: #4a5568;
             font-weight: 600;
             font-size: 0.95em;
-            letter-spacing: 0.3px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .label-hint {
+            font-weight: normal;
+            color: #7f96a0;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-left: 5px;
         }
 
         input[type="text"],
         input[type="number"],
-        textarea,
         select {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid #e5e5e5;
+            border-radius: 2px;
             font-size: 16px;
             transition: all 0.3s ease;
-            font-family: inherit;
-            background-color: #f7fafc;
+            font-family: Georgia, serif;
+            background-color: #f9f9f9;
         }
 
         input[type="text"]:hover,
         input[type="number"]:hover,
-        textarea:hover,
         select:hover {
-            border-color: #cbd5e0;
+            border-color: #d4c5b0;
             background-color: white;
         }
 
         input[type="text"]:focus,
         input[type="number"]:focus,
-        textarea:focus,
         select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #6b5744;
             background-color: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 3px rgba(107, 87, 68, 0.1);
         }
 
         .form-row {
@@ -101,70 +139,182 @@
             gap: 24px;
         }
 
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+        /* Rating Scale Styles */
+        .rating-group {
+            margin-bottom: 30px;
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            position: relative;
+        }
+
+        .rating-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .rating-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e5e5e5;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+            min-width: 80px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .rating-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #6b5744;
+            margin-bottom: 5px;
+        }
+
+        .rating-label {
+            font-size: 0.85em;
+            color: #7f96a0;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background-color: #6b5744;
+            border-color: #6b5744;
+        }
+
+        .rating-option input[type="radio"]:checked + label .rating-number,
+        .rating-option input[type="radio"]:checked + label .rating-label {
+            color: white;
+        }
+
+        .rating-option label:hover {
+            border-color: #d4c5b0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: help;
+        }
+
+        .tooltip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-color: #7f96a0;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 280px;
+            background-color: #2d3748;
+            color: white;
+            text-align: left;
+            border-radius: 4px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -140px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+            line-height: 1.4;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #2d3748 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
         }
 
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #6b5744;
             color: white;
             padding: 16px 32px;
             border: none;
-            border-radius: 12px;
+            border-radius: 4px;
             font-size: 17px;
             cursor: pointer;
             width: 100%;
             margin-top: 30px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             letter-spacing: 0.5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            text-transform: uppercase;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            background-color: #5a4936;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(107, 87, 68, 0.3);
         }
 
         button:active {
             transform: translateY(0);
         }
 
-        .subtitle {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+            }
 
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+            h1 {
+                font-size: 2.2em;
+            }
 
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
 
-        ::placeholder {
-            color: #a0aec0;
+            .rating-container {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div style="text-align: right; margin-bottom: 20px;">
-            <a href="index.html" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">← Back to Home</a>
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
         </div>
-        <h1>🍞 Sourdough Tracker</h1>
+        <h1>🍞 Add Bread Entry</h1>
         <p class="subtitle">Track your sourdough bread making variables and results</p>
 
         <form id="sourdoughForm">
@@ -184,13 +334,25 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="feedTime">Time for Feed to Finish</label>
-                    <input type="text" id="feedTime" name="feedTime" placeholder="e.g., 4 hours">
+                    <label for="tempFeeding">Temperature When Feeding <span class="label-hint">(°C)</span></label>
+                    <input type="number" id="tempFeeding" name="tempFeeding" min="0" max="50" placeholder="e.g., 22">
                 </div>
 
                 <div class="form-group">
+                    <label for="feedTime">Time for Feed to Finish</label>
+                    <input type="text" id="feedTime" name="feedTime" placeholder="e.g., 4 hours">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
                     <label for="feedRisePercent">% Risen from Original Height (Feed)</label>
                     <input type="number" id="feedRisePercent" name="feedRisePercent" min="0" max="500" placeholder="e.g., 100">
+                </div>
+
+                <div class="form-group">
+                    <label for="tempProving">Temperature When Proving <span class="label-hint">(°C)</span></label>
+                    <input type="number" id="tempProving" name="tempProving" min="0" max="50" placeholder="e.g., 24">
                 </div>
             </div>
 
@@ -232,31 +394,192 @@
 
             <h2>Results</h2>
 
-            <div class="form-group">
-                <label for="overall">Overall Rating</label>
-                <select id="overall" name="overall">
-                    <option value="">Select rating...</option>
-                    <option value="5">5 - Excellent</option>
-                    <option value="4">4 - Good</option>
-                    <option value="3">3 - Average</option>
-                    <option value="2">2 - Below Average</option>
-                    <option value="1">1 - Poor</option>
-                </select>
+            <div class="rating-group">
+                <label>
+                    Overall Rating
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Rate your bread's overall quality considering all factors: taste, texture, appearance, and how well it met your expectations.</span>
+                    </span>
+                </label>
+                <div class="rating-container">
+                    <div class="rating-option">
+                        <input type="radio" id="overall1" name="overall" value="1">
+                        <label for="overall1">
+                            <span class="rating-number">1</span>
+                            <span class="rating-label">Poor</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="overall2" name="overall" value="2">
+                        <label for="overall2">
+                            <span class="rating-number">2</span>
+                            <span class="rating-label">Fair</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="overall3" name="overall" value="3">
+                        <label for="overall3">
+                            <span class="rating-number">3</span>
+                            <span class="rating-label">Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="overall4" name="overall" value="4">
+                        <label for="overall4">
+                            <span class="rating-number">4</span>
+                            <span class="rating-label">Very Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="overall5" name="overall" value="5">
+                        <label for="overall5">
+                            <span class="rating-number">5</span>
+                            <span class="rating-label">Excellent</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="taste">Taste</label>
-                <textarea id="taste" name="taste" rows="3" placeholder="Describe the taste..."></textarea>
+            <div class="rating-group">
+                <label>
+                    Taste
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">1 = Bland or off-flavors • 2 = Acceptable but lacking depth • 3 = Pleasant, good sourdough flavor • 4 = Complex, well-developed tang • 5 = Perfect balance, exceptional flavor</span>
+                    </span>
+                </label>
+                <div class="rating-container">
+                    <div class="rating-option">
+                        <input type="radio" id="taste1" name="taste" value="1">
+                        <label for="taste1">
+                            <span class="rating-number">1</span>
+                            <span class="rating-label">Poor</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="taste2" name="taste" value="2">
+                        <label for="taste2">
+                            <span class="rating-number">2</span>
+                            <span class="rating-label">Fair</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="taste3" name="taste" value="3">
+                        <label for="taste3">
+                            <span class="rating-number">3</span>
+                            <span class="rating-label">Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="taste4" name="taste" value="4">
+                        <label for="taste4">
+                            <span class="rating-number">4</span>
+                            <span class="rating-label">Very Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="taste5" name="taste" value="5">
+                        <label for="taste5">
+                            <span class="rating-number">5</span>
+                            <span class="rating-label">Excellent</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="textureBread">Texture of Bread</label>
-                <textarea id="textureBread" name="textureBread" rows="3" placeholder="Describe the bread texture (crumb, airiness, etc.)..."></textarea>
+            <div class="rating-group">
+                <label>
+                    Texture of Bread (Crumb)
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">1 = Dense, gummy, or dry • 2 = Slightly dense or uneven • 3 = Good chew, decent holes • 4 = Light, open crumb, great structure • 5 = Perfect airiness, beautiful holes, ideal texture</span>
+                    </span>
+                </label>
+                <div class="rating-container">
+                    <div class="rating-option">
+                        <input type="radio" id="textureBread1" name="textureBread" value="1">
+                        <label for="textureBread1">
+                            <span class="rating-number">1</span>
+                            <span class="rating-label">Poor</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureBread2" name="textureBread" value="2">
+                        <label for="textureBread2">
+                            <span class="rating-number">2</span>
+                            <span class="rating-label">Fair</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureBread3" name="textureBread" value="3">
+                        <label for="textureBread3">
+                            <span class="rating-number">3</span>
+                            <span class="rating-label">Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureBread4" name="textureBread" value="4">
+                        <label for="textureBread4">
+                            <span class="rating-number">4</span>
+                            <span class="rating-label">Very Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureBread5" name="textureBread" value="5">
+                        <label for="textureBread5">
+                            <span class="rating-number">5</span>
+                            <span class="rating-label">Excellent</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="textureCrust">Texture of Crust</label>
-                <textarea id="textureCrust" name="textureCrust" rows="3" placeholder="Describe the crust texture..."></textarea>
+            <div class="rating-group">
+                <label>
+                    Texture of Crust
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">1 = Too hard/soft, burnt, or pale • 2 = Acceptable but not ideal • 3 = Good crunch, nice color • 4 = Excellent crispness, golden brown • 5 = Perfect crackle, beautiful caramelization</span>
+                    </span>
+                </label>
+                <div class="rating-container">
+                    <div class="rating-option">
+                        <input type="radio" id="textureCrust1" name="textureCrust" value="1">
+                        <label for="textureCrust1">
+                            <span class="rating-number">1</span>
+                            <span class="rating-label">Poor</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureCrust2" name="textureCrust" value="2">
+                        <label for="textureCrust2">
+                            <span class="rating-number">2</span>
+                            <span class="rating-label">Fair</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureCrust3" name="textureCrust" value="3">
+                        <label for="textureCrust3">
+                            <span class="rating-number">3</span>
+                            <span class="rating-label">Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureCrust4" name="textureCrust" value="4">
+                        <label for="textureCrust4">
+                            <span class="rating-number">4</span>
+                            <span class="rating-label">Very Good</span>
+                        </label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="textureCrust5" name="textureCrust" value="5">
+                        <label for="textureCrust5">
+                            <span class="rating-number">5</span>
+                            <span class="rating-label">Excellent</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <button type="submit">Save Bread Entry</button>
