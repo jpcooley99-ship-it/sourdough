@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sourdough Tracker - Results</title>
+    <title>Sourdough Results</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,20 +12,22 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f9f7f4;
             min-height: 100vh;
             padding: 40px 20px;
-            line-height: 1.6;
+            line-height: 1.8;
+            color: #0d0d0e;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background-color: white;
-            padding: 50px;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px 70px;
+            border-radius: 2px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #d4c5b0;
         }
 
         .header {
@@ -38,32 +40,46 @@
         }
 
         h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2.5em;
-            font-weight: 700;
+            color: #6b5744;
+            font-size: 2.8em;
+            font-weight: normal;
+            font-style: italic;
         }
 
-        .back-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .back-button, .action-button {
+            background-color: #7f96a0;
             color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            padding: 10px 24px;
+            border-radius: 4px;
             text-decoration: none;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
             display: inline-block;
         }
 
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        .back-button:hover, .action-button:hover {
+            background-color: #6a8089;
+            transform: translateY(-1px);
+        }
+
+        .action-button.download {
+            background-color: #6b5744;
+        }
+
+        .action-button.download:hover {
+            background-color: #5a4936;
         }
 
         .table-container {
@@ -78,7 +94,7 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #6b5744;
             color: white;
         }
 
@@ -86,17 +102,19 @@
             padding: 16px 12px;
             text-align: left;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         td {
             padding: 14px 12px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e5e5e5;
             color: #4a5568;
-            font-size: 15px;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         tbody tr {
@@ -104,15 +122,15 @@
         }
 
         tbody tr:hover {
-            background-color: #f7fafc;
+            background-color: #fdf8f0;
         }
 
         .rating {
             display: inline-block;
             padding: 6px 12px;
-            border-radius: 8px;
+            border-radius: 4px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .rating-5 {
@@ -143,13 +161,14 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #718096;
+            color: #7f96a0;
         }
 
         .empty-state h2 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #4a5568;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #6b5744;
+            font-style: italic;
         }
 
         .empty-state p {
@@ -158,51 +177,74 @@
         }
 
         .empty-state a {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #6b5744;
             color: white;
             padding: 14px 28px;
-            border-radius: 12px;
+            border-radius: 4px;
             text-decoration: none;
             display: inline-block;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .empty-state a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            background-color: #5a4936;
+            transform: translateY(-1px);
         }
 
         .delete-btn {
-            background-color: #fc8181;
+            background-color: #c45a3c;
             color: white;
             border: none;
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             transition: all 0.2s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .delete-btn:hover {
-            background-color: #f56565;
+            background-color: #a84d31;
             transform: scale(1.05);
+        }
+
+        #fileInput {
+            display: none;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 30px 20px;
+                padding: 40px 30px;
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
 
             th, td {
                 padding: 10px 8px;
-                font-size: 13px;
+                font-size: 12px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .button-group {
+                width: 100%;
+            }
+
+            .back-button, .action-button {
+                flex: 1;
+                text-align: center;
             }
         }
     </style>
@@ -211,8 +253,14 @@
     <div class="container">
         <div class="header">
             <h1>📊 Previous Results</h1>
-            <a href="index.html" class="back-button">← Back to Home</a>
+            <div class="button-group">
+                <button class="action-button download" onclick="downloadData()">⬇️ Download Data</button>
+                <button class="action-button" onclick="document.getElementById('fileInput').click()">⬆️ Upload Data</button>
+                <a href="index.html" class="back-button">← Home</a>
+            </div>
         </div>
+
+        <input type="file" id="fileInput" accept=".json" onchange="uploadData(event)">
 
         <div class="table-container">
             <div id="resultsContent">
@@ -246,8 +294,10 @@
                             <th>Date</th>
                             <th>Feed Flour</th>
                             <th>Feed Water</th>
+                            <th>Temp Feeding (°C)</th>
                             <th>Feed Time</th>
                             <th>Feed Rise %</th>
+                            <th>Temp Proving (°C)</th>
                             <th>Rise Time</th>
                             <th>Rise %</th>
                             <th>Stretches</th>
@@ -266,25 +316,30 @@
 
             entries.forEach((entry, index) => {
                 const ratingClass = entry.overall ? `rating-${entry.overall}` : '';
-                const ratingText = entry.overall ? `${entry.overall} / 5` : 'N/A';
+                const overallText = entry.overall ? `${entry.overall} / 5` : 'N/A';
+                const tasteText = entry.taste ? `${entry.taste} / 5` : 'N/A';
+                const breadTextureText = entry.textureBread ? `${entry.textureBread} / 5` : 'N/A';
+                const crustTextureText = entry.textureCrust ? `${entry.textureCrust} / 5` : 'N/A';
 
                 tableHTML += `
                     <tr>
                         <td>${entry.date || 'N/A'}</td>
                         <td>${entry.feedFlour || '-'}</td>
                         <td>${entry.feedWater || '-'}</td>
+                        <td>${entry.tempFeeding ? entry.tempFeeding + '°C' : '-'}</td>
                         <td>${entry.feedTime || '-'}</td>
                         <td>${entry.feedRisePercent ? entry.feedRisePercent + '%' : '-'}</td>
+                        <td>${entry.tempProving ? entry.tempProving + '°C' : '-'}</td>
                         <td>${entry.riseTime || '-'}</td>
                         <td>${entry.risePercent ? entry.risePercent + '%' : '-'}</td>
                         <td>${entry.stretchCount || '-'}</td>
                         <td>${entry.timeLeftRisen || '-'}</td>
                         <td>${entry.cookingTimeLidOn || '-'}</td>
                         <td>${entry.cookingTimeLidOff || '-'}</td>
-                        <td><span class="rating ${ratingClass}">${ratingText}</span></td>
-                        <td>${entry.taste || '-'}</td>
-                        <td>${entry.textureBread || '-'}</td>
-                        <td>${entry.textureCrust || '-'}</td>
+                        <td><span class="rating ${ratingClass}">${overallText}</span></td>
+                        <td>${tasteText}</td>
+                        <td>${breadTextureText}</td>
+                        <td>${crustTextureText}</td>
                         <td><button class="delete-btn" onclick="deleteEntry(${index})">Delete</button></td>
                     </tr>
                 `;
@@ -306,6 +361,73 @@
                 localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
                 loadResults();
             }
+        }
+
+        // Download data as JSON
+        function downloadData() {
+            const entries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
+
+            if (entries.length === 0) {
+                alert('No data to download. Add some entries first!');
+                return;
+            }
+
+            const dataStr = JSON.stringify(entries, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sourdough-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Upload data from JSON file
+        function uploadData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    if (!Array.isArray(data)) {
+                        alert('Invalid file format. Please upload a valid JSON array.');
+                        return;
+                    }
+
+                    const existingEntries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
+
+                    if (existingEntries.length > 0) {
+                        if (confirm(`You have ${existingEntries.length} existing entries. Do you want to:\n\nOK = Merge with uploaded data\nCancel = Replace all existing data`)) {
+                            // Merge
+                            const mergedEntries = [...existingEntries, ...data];
+                            localStorage.setItem('sourdoughEntries', JSON.stringify(mergedEntries));
+                            alert(`Successfully added ${data.length} entries. Total: ${mergedEntries.length}`);
+                        } else {
+                            // Replace
+                            localStorage.setItem('sourdoughEntries', JSON.stringify(data));
+                            alert(`Successfully replaced all data with ${data.length} entries.`);
+                        }
+                    } else {
+                        localStorage.setItem('sourdoughEntries', JSON.stringify(data));
+                        alert(`Successfully imported ${data.length} entries.`);
+                    }
+
+                    loadResults();
+
+                } catch (error) {
+                    alert('Error reading file. Please make sure it\'s a valid JSON file.');
+                    console.error('Upload error:', error);
+                }
+            };
+            reader.readAsText(file);
+
+            // Reset input so the same file can be uploaded again if needed
+            event.target.value = '';
         }
 
         // Load results on page load
