@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourdough Recommendations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f9f7f4;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.8;
+            color: #0d0d0e;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 60px 70px;
+            border-radius: 2px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #d4c5b0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h1 {
+            color: #6b5744;
+            font-size: 2.8em;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        h2 {
+            color: #6b5744;
+            font-size: 1.8em;
+            font-weight: normal;
+            font-style: italic;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d4c5b0;
+        }
+
+        h3 {
+            color: #7f96a0;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .back-button {
+            background-color: #7f96a0;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background-color: #6a8089;
+            transform: translateY(-1px);
+        }
+
+        .intro {
+            background-color: #fdf8f0;
+            padding: 25px 30px;
+            border-left: 5px solid #d4c5b0;
+            border-radius: 2px;
+            margin-bottom: 30px;
+        }
+
+        .intro p {
+            color: #4a5568;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #6b5744 0%, #5a4936 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            width: 100%;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(107, 87, 68, 0.3);
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 87, 68, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f96a0;
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e5e5;
+            border-top: 4px solid #6b5744;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 2px;
+            border: 2px solid #e5e5e5;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #6b5744;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #7f96a0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .recommendation-card {
+            background-color: #fdf8f0;
+            padding: 25px;
+            border-left: 5px solid #6b5744;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+
+        .recommendation-card.high-priority {
+            border-left-color: #c45a3c;
+            background-color: #fff5f5;
+        }
+
+        .recommendation-card h4 {
+            color: #6b5744;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .recommendation-card.high-priority h4 {
+            color: #c45a3c;
+        }
+
+        .recommendation-card p {
+            color: #4a5568;
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .why-section {
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 2px;
+            margin-top: 15px;
+            border-left: 3px solid #d4c5b0;
+        }
+
+        .why-section strong {
+            color: #7f96a0;
+            font-size: 0.95em;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .priority-high {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+
+        .priority-medium {
+            background-color: #fef5e7;
+            color: #744210;
+        }
+
+        .priority-low {
+            background-color: #bee3f8;
+            color: #2c5282;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f96a0;
+        }
+
+        .no-data h2 {
+            border: none;
+            padding: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Recommendations</h1>
+            <a href="index.html" class="back-button">← Home</a>
+        </div>
+
+        <div class="intro">
+            <p><strong>Welcome to your personalized sourdough advisor!</strong></p>
+            <p>This tool analyzes your baking history to identify patterns and provide data-driven recommendations to improve your next loaf.</p>
+        </div>
+
+        <button class="generate-btn" id="generateBtn" onclick="generateRecommendations()">
+            🔮 Generate Recommendations
+        </button>
+
+        <div id="content">
+            <div class="no-data">
+                <h2>Ready to analyze your data</h2>
+                <p>Click the button above to generate personalized recommendations based on your baking history.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateRecommendations() {
+            const btn = document.getElementById('generateBtn');
+            const content = document.getElementById('content');
+            const entries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
+
+            if (entries.length === 0) {
+                content.innerHTML = `
+                    <div class="no-data">
+                        <h2>No Data Available</h2>
+                        <p>You need to add some bread entries before I can provide recommendations.</p>
+                        <p style="margin-top: 20px;"><a href="form.html" class="back-button">Add Your First Entry</a></p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Show loading
+            btn.disabled = true;
+            content.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing your ${entries.length} bread ${entries.length === 1 ? 'entry' : 'entries'}...</p>
+                    <p>Consulting sourdough best practices...</p>
+                </div>
+            `;
+
+            // Simulate thinking time
+            setTimeout(() => {
+                const analysis = analyzeData(entries);
+                displayRecommendations(analysis);
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        function analyzeData(entries) {
+            const analysis = {
+                totalEntries: entries.length,
+                avgOverall: 0,
+                avgTaste: 0,
+                avgBreadTexture: 0,
+                avgCrustTexture: 0,
+                avgFeedingTemp: 0,
+                avgProvingTemp: 0,
+                lowRatedEntries: [],
+                highRatedEntries: [],
+                recommendations: []
+            };
+
+            // Calculate averages
+            let overallSum = 0, tasteSum = 0, breadSum = 0, crustSum = 0;
+            let feedingTempSum = 0, provingTempSum = 0;
+            let feedingTempCount = 0, provingTempCount = 0;
+
+            entries.forEach(entry => {
+                if (entry.overall) overallSum += parseInt(entry.overall);
+                if (entry.taste) tasteSum += parseInt(entry.taste);
+                if (entry.textureBread) breadSum += parseInt(entry.textureBread);
+                if (entry.textureCrust) crustSum += parseInt(entry.textureCrust);
+
+                if (entry.tempFeeding) {
+                    feedingTempSum += parseFloat(entry.tempFeeding);
+                    feedingTempCount++;
+                }
+                if (entry.tempProving) {
+                    provingTempSum += parseFloat(entry.tempProving);
+                    provingTempCount++;
+                }
+
+                const avgRating = (
+                    (parseInt(entry.overall) || 0) +
+                    (parseInt(entry.taste) || 0) +
+                    (parseInt(entry.textureBread) || 0) +
+                    (parseInt(entry.textureCrust) || 0)
+                ) / 4;
+
+                if (avgRating < 3) {
+                    analysis.lowRatedEntries.push(entry);
+                } else if (avgRating >= 4) {
+                    analysis.highRatedEntries.push(entry);
+                }
+            });
+
+            analysis.avgOverall = (overallSum / entries.length).toFixed(1);
+            analysis.avgTaste = (tasteSum / entries.length).toFixed(1);
+            analysis.avgBreadTexture = (breadSum / entries.length).toFixed(1);
+            analysis.avgCrustTexture = (crustSum / entries.length).toFixed(1);
+            analysis.avgFeedingTemp = feedingTempCount > 0 ? (feedingTempSum / feedingTempCount).toFixed(1) : null;
+            analysis.avgProvingTemp = provingTempCount > 0 ? (provingTempSum / provingTempCount).toFixed(1) : null;
+
+            // Generate recommendations
+            analysis.recommendations = generateSmartRecommendations(analysis, entries);
+
+            return analysis;
+        }
+
+        function generateSmartRecommendations(analysis, entries) {
+            const recommendations = [];
+
+            // Temperature recommendations
+            if (analysis.avgFeedingTemp) {
+                if (analysis.avgFeedingTemp < 20) {
+                    recommendations.push({
+                        title: "Increase Feeding Temperature",
+                        priority: "high",
+                        suggestion: `Your average feeding temperature is ${analysis.avgFeedingTemp}°C, which is quite cold. Try feeding your starter at 22-24°C for more active fermentation.`,
+                        why: "Sourdough starters are most active between 22-26°C. Cold temperatures slow down fermentation, which can lead to under-active starter and dense bread."
+                    });
+                } else if (analysis.avgFeedingTemp > 28) {
+                    recommendations.push({
+                        title: "Lower Feeding Temperature",
+                        priority: "medium",
+                        suggestion: `Your average feeding temperature is ${analysis.avgFeedingTemp}°C, which is quite warm. Consider feeding at 22-24°C for better flavor development.`,
+                        why: "Very warm temperatures can cause starter to ferment too quickly, leading to overly sour flavors and less complex taste profiles."
+                    });
+                }
+            }
+
+            if (analysis.avgProvingTemp) {
+                if (analysis.avgProvingTemp < 20) {
+                    recommendations.push({
+                        title: "Warmer Proving Environment Needed",
+                        priority: "high",
+                        suggestion: `Your average proving temperature is ${analysis.avgProvingTemp}°C. Try proving at 23-25°C for better rise and texture.`,
+                        why: "Cold proving temperatures dramatically slow fermentation. While cold proving in the fridge is beneficial, bulk fermentation needs warmth for proper gluten development and gas production."
+                    });
+                } else if (analysis.avgProvingTemp > 26) {
+                    recommendations.push({
+                        title: "Moderate Your Proving Temperature",
+                        priority: "medium",
+                        suggestion: `Your average proving temperature is ${analysis.avgProvingTemp}°C. Consider proving at 23-25°C for more controlled fermentation.`,
+                        why: "High temperatures speed up fermentation, which can lead to over-proofed dough that collapses or develops overly acidic flavors."
+                    });
+                }
+            }
+
+            // Texture recommendations
+            if (analysis.avgBreadTexture < 3.5) {
+                recommendations.push({
+                    title: "Improve Bread Texture & Crumb",
+                    priority: "high",
+                    suggestion: "Your bread texture scores suggest dense or gummy crumb. Focus on proper gluten development through adequate stretch-and-fold sessions (4-6 times), and ensure your dough doubles during bulk fermentation.",
+                    why: "Poor crumb structure usually indicates under-developed gluten or improper fermentation timing. The stretch-and-fold technique builds strength in the dough, creating a network that traps gas bubbles for an open, airy crumb."
+                });
+            }
+
+            if (analysis.avgCrustTexture < 3.5) {
+                recommendations.push({
+                    title: "Enhance Crust Development",
+                    priority: "medium",
+                    suggestion: "Your crust could be improved. Ensure you're baking with the lid on for 25-30 minutes to build steam, then remove the lid for another 25-30 minutes to develop deep color and crispness.",
+                    why: "Steam during the first part of baking allows the bread to expand fully (oven spring) and develop a thin, crisp crust. The second phase without steam creates caramelization and that signature crackle."
+                });
+            }
+
+            // Taste recommendations
+            if (analysis.avgTaste < 3.5) {
+                recommendations.push({
+                    title: "Develop More Complex Flavors",
+                    priority: "medium",
+                    suggestion: "To improve taste, try extending your bulk fermentation time slightly, or consider a longer cold prove (up to 24-48 hours) in the refrigerator. Also ensure your starter is at peak activity (doubled and bubbly) before mixing your dough.",
+                    why: "Flavor in sourdough develops over time through fermentation. The longer cold prove allows enzymes to break down complex starches and proteins, creating deeper, more nuanced flavors. An active starter ensures proper fermentation."
+                });
+            }
+
+            // Pattern-based recommendations
+            const hasConsistentLowScores = analysis.lowRatedEntries.length > entries.length * 0.5;
+            const hasHighVariability = Math.max(...entries.map(e => parseInt(e.overall) || 0)) - Math.min(...entries.map(e => parseInt(e.overall) || 0)) > 3;
+
+            if (hasConsistentLowScores) {
+                recommendations.push({
+                    title: "Master the Fundamentals",
+                    priority: "high",
+                    suggestion: "More than half your loaves scored below average. Focus on these key steps: 1) Feed starter at peak (doubled and bubbly), 2) Proper bulk fermentation (dough should double), 3) Adequate shaping to build tension, 4) Proper oven temperature (pre-heat dutch oven for 30 min at 230°C).",
+                    why: "Consistency issues often stem from not following the fundamental steps carefully. Each stage builds on the previous one - a weak starter leads to poor rise, inadequate fermentation leads to dense bread, and improper baking temperature affects crust and cooking."
+                });
+            }
+
+            if (hasHighVariability && !hasConsistentLowScores) {
+                recommendations.push({
+                    title: "Increase Consistency",
+                    priority: "low",
+                    suggestion: "Your results vary significantly. Try to standardize your process: use the same flour brand, maintain consistent room temperature, and time your bulk fermentation by visual cues (doubling) rather than strict hours.",
+                    why: "Variable results suggest inconsistent conditions or timing. Sourdough is affected by many factors - temperature, flour protein content, starter activity, and hydration. Standardizing what you can control helps you understand what actually makes a difference."
+                });
+            }
+
+            // Advanced recommendations based on high performers
+            if (analysis.highRatedEntries.length > 0 && analysis.avgOverall < 4.5) {
+                const bestEntry = analysis.highRatedEntries.reduce((best, current) => {
+                    const currentAvg = ((parseInt(current.overall) || 0) + (parseInt(current.taste) || 0) +
+                                       (parseInt(current.textureBread) || 0) + (parseInt(current.textureCrust) || 0)) / 4;
+                    const bestAvg = ((parseInt(best.overall) || 0) + (parseInt(best.taste) || 0) +
+                                    (parseInt(best.textureBread) || 0) + (parseInt(best.textureCrust) || 0)) / 4;
+                    return currentAvg > bestAvg ? current : best;
+                });
+
+                let tips = [];
+                if (bestEntry.tempFeeding) tips.push(`feeding temp of ${bestEntry.tempFeeding}°C`);
+                if (bestEntry.tempProving) tips.push(`proving temp of ${bestEntry.tempProving}°C`);
+                if (bestEntry.stretchCount) tips.push(`${bestEntry.stretchCount} stretch-and-folds`);
+
+                if (tips.length > 0) {
+                    recommendations.push({
+                        title: "Replicate Your Best Results",
+                        priority: "low",
+                        suggestion: `Your highest-rated bread used: ${tips.join(', ')}. Try to replicate these conditions in your next bake.`,
+                        why: "Your own successful bakes are the best guide! These conditions worked well in your specific environment with your equipment and flour."
+                    });
+                }
+            }
+
+            // General wisdom if doing well
+            if (analysis.avgOverall >= 4 && recommendations.length === 0) {
+                recommendations.push({
+                    title: "You're Doing Great!",
+                    priority: "low",
+                    suggestion: "Your bread is consistently scoring high! Consider experimenting with: different flour types (whole wheat, rye, spelt), adding seeds or grains, or trying different shaping techniques for variety.",
+                    why: "Once you've mastered the basics, experimentation keeps baking exciting and helps you develop your skills further. Each flour type behaves differently and creates unique flavors."
+                });
+            }
+
+            return recommendations;
+        }
+
+        function displayRecommendations(analysis) {
+            const content = document.getElementById('content');
+
+            let html = '<div class="results">';
+
+            // Statistics
+            html += '<h2>Your Baking Statistics</h2>';
+            html += '<div class="stat-grid">';
+            html += `<div class="stat-card"><div class="stat-value">${analysis.totalEntries}</div><div class="stat-label">Total Loaves</div></div>`;
+            html += `<div class="stat-card"><div class="stat-value">${analysis.avgOverall}/5</div><div class="stat-label">Avg Overall</div></div>`;
+            html += `<div class="stat-card"><div class="stat-value">${analysis.avgTaste}/5</div><div class="stat-label">Avg Taste</div></div>`;
+            html += `<div class="stat-card"><div class="stat-value">${analysis.avgBreadTexture}/5</div><div class="stat-label">Avg Crumb</div></div>`;
+            html += `<div class="stat-card"><div class="stat-value">${analysis.avgCrustTexture}/5</div><div class="stat-label">Avg Crust</div></div>`;
+
+            if (analysis.avgFeedingTemp) {
+                html += `<div class="stat-card"><div class="stat-value">${analysis.avgFeedingTemp}°C</div><div class="stat-label">Avg Feeding Temp</div></div>`;
+            }
+            if (analysis.avgProvingTemp) {
+                html += `<div class="stat-card"><div class="stat-value">${analysis.avgProvingTemp}°C</div><div class="stat-label">Avg Proving Temp</div></div>`;
+            }
+            html += '</div>';
+
+            // Recommendations
+            html += '<h2>Personalized Recommendations</h2>';
+
+            if (analysis.recommendations.length === 0) {
+                html += '<div class="recommendation-card">';
+                html += '<h4>Keep Up the Great Work!</h4>';
+                html += '<p>Your baking data looks good. Continue following your current process and keep tracking your results.</p>';
+                html += '</div>';
+            } else {
+                analysis.recommendations.forEach(rec => {
+                    const priorityClass = rec.priority === 'high' ? 'high-priority' : '';
+                    const badgeClass = `priority-${rec.priority}`;
+                    const badgeText = rec.priority.charAt(0).toUpperCase() + rec.priority.slice(1);
+
+                    html += `<div class="recommendation-card ${priorityClass}">`;
+                    html += `<h4>${rec.title}<span class="priority-badge ${badgeClass}">${badgeText} Priority</span></h4>`;
+                    html += `<p><strong>Recommendation:</strong> ${rec.suggestion}</p>`;
+                    html += `<div class="why-section"><strong>Why this matters:</strong> ${rec.why}</div>`;
+                    html += '</div>';
+                });
+            }
+
+            html += '</div>';
+
+            content.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

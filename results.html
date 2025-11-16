@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background-color: white;
             padding: 60px 70px;
@@ -102,7 +102,7 @@
             padding: 16px 12px;
             text-align: left;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
@@ -113,8 +113,17 @@
             padding: 14px 12px;
             border-bottom: 1px solid #e5e5e5;
             color: #4a5568;
-            font-size: 14px;
+            font-size: 13px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 200px;
+        }
+
+        td.notes-cell {
+            font-size: 12px;
+            font-style: italic;
+            color: #7f96a0;
+            max-width: 250px;
+            word-wrap: break-word;
         }
 
         tbody tr {
@@ -202,7 +211,7 @@
             padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             transition: all 0.2s ease;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -230,7 +239,7 @@
 
             th, td {
                 padding: 10px 8px;
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .header {
@@ -254,13 +263,13 @@
         <div class="header">
             <h1>📊 Previous Results</h1>
             <div class="button-group">
-                <button class="action-button download" onclick="downloadData()">⬇️ Download Data</button>
-                <button class="action-button" onclick="document.getElementById('fileInput').click()">⬆️ Upload Data</button>
+                <button class="action-button download" onclick="downloadCSV()">⬇️ Download CSV</button>
+                <button class="action-button" onclick="document.getElementById('fileInput').click()">⬆️ Upload CSV</button>
                 <a href="index.html" class="back-button">← Home</a>
             </div>
         </div>
 
-        <input type="file" id="fileInput" accept=".json" onchange="uploadData(event)">
+        <input type="file" id="fileInput" accept=".csv" onchange="uploadCSV(event)">
 
         <div class="table-container">
             <div id="resultsContent">
@@ -286,7 +295,7 @@
                 return;
             }
 
-            // Create table
+            // Create table with all fields
             let tableHTML = `
                 <table>
                     <thead>
@@ -294,20 +303,24 @@
                             <th>Date</th>
                             <th>Feed Flour</th>
                             <th>Feed Water</th>
-                            <th>Temp Feeding (°C)</th>
+                            <th>Temp Feeding</th>
                             <th>Feed Time</th>
                             <th>Feed Rise %</th>
-                            <th>Temp Proving (°C)</th>
+                            <th>Temp Proving</th>
                             <th>Rise Time</th>
                             <th>Rise %</th>
                             <th>Stretches</th>
                             <th>Time Left</th>
-                            <th>Cook (Lid On)</th>
-                            <th>Cook (Lid Off)</th>
+                            <th>Cook Lid On</th>
+                            <th>Cook Lid Off</th>
                             <th>Overall</th>
+                            <th>Overall Notes</th>
                             <th>Taste</th>
+                            <th>Taste Notes</th>
                             <th>Bread Texture</th>
+                            <th>Bread Notes</th>
                             <th>Crust Texture</th>
+                            <th>Crust Notes</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -316,10 +329,10 @@
 
             entries.forEach((entry, index) => {
                 const ratingClass = entry.overall ? `rating-${entry.overall}` : '';
-                const overallText = entry.overall ? `${entry.overall} / 5` : 'N/A';
-                const tasteText = entry.taste ? `${entry.taste} / 5` : 'N/A';
-                const breadTextureText = entry.textureBread ? `${entry.textureBread} / 5` : 'N/A';
-                const crustTextureText = entry.textureCrust ? `${entry.textureCrust} / 5` : 'N/A';
+                const overallText = entry.overall ? `${entry.overall}/5` : 'N/A';
+                const tasteText = entry.taste ? `${entry.taste}/5` : 'N/A';
+                const breadTextureText = entry.textureBread ? `${entry.textureBread}/5` : 'N/A';
+                const crustTextureText = entry.textureCrust ? `${entry.textureCrust}/5` : 'N/A';
 
                 tableHTML += `
                     <tr>
@@ -337,9 +350,13 @@
                         <td>${entry.cookingTimeLidOn || '-'}</td>
                         <td>${entry.cookingTimeLidOff || '-'}</td>
                         <td><span class="rating ${ratingClass}">${overallText}</span></td>
+                        <td class="notes-cell">${entry.overallNotes || '-'}</td>
                         <td>${tasteText}</td>
+                        <td class="notes-cell">${entry.tasteNotes || '-'}</td>
                         <td>${breadTextureText}</td>
+                        <td class="notes-cell">${entry.textureBreadNotes || '-'}</td>
                         <td>${crustTextureText}</td>
+                        <td class="notes-cell">${entry.textureCrustNotes || '-'}</td>
                         <td><button class="delete-btn" onclick="deleteEntry(${index})">Delete</button></td>
                     </tr>
                 `;
@@ -363,8 +380,8 @@
             }
         }
 
-        // Download data as JSON
-        function downloadData() {
+        // Download data as CSV
+        function downloadCSV() {
             const entries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
 
             if (entries.length === 0) {
@@ -372,30 +389,79 @@
                 return;
             }
 
-            const dataStr = JSON.stringify(entries, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
+            // Define CSV headers
+            const headers = [
+                'Date', 'Feed Flour', 'Feed Water', 'Temp Feeding (°C)', 'Feed Time', 'Feed Rise %',
+                'Temp Proving (°C)', 'Rise Time', 'Rise %', 'Stretches', 'Time Left',
+                'Cook Lid On', 'Cook Lid Off', 'Overall Rating', 'Overall Notes',
+                'Taste Rating', 'Taste Notes', 'Bread Texture Rating', 'Bread Texture Notes',
+                'Crust Texture Rating', 'Crust Texture Notes'
+            ];
+
+            // Convert entries to CSV rows
+            const csvRows = [headers.join(',')];
+
+            entries.forEach(entry => {
+                const row = [
+                    escapeCSV(entry.date || ''),
+                    escapeCSV(entry.feedFlour || ''),
+                    escapeCSV(entry.feedWater || ''),
+                    entry.tempFeeding || '',
+                    escapeCSV(entry.feedTime || ''),
+                    entry.feedRisePercent || '',
+                    entry.tempProving || '',
+                    escapeCSV(entry.riseTime || ''),
+                    entry.risePercent || '',
+                    entry.stretchCount || '',
+                    escapeCSV(entry.timeLeftRisen || ''),
+                    escapeCSV(entry.cookingTimeLidOn || ''),
+                    escapeCSV(entry.cookingTimeLidOff || ''),
+                    entry.overall || '',
+                    escapeCSV(entry.overallNotes || ''),
+                    entry.taste || '',
+                    escapeCSV(entry.tasteNotes || ''),
+                    entry.textureBread || '',
+                    escapeCSV(entry.textureBreadNotes || ''),
+                    entry.textureCrust || '',
+                    escapeCSV(entry.textureCrustNotes || '')
+                ];
+                csvRows.push(row.join(','));
+            });
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `sourdough-data-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = `sourdough-data-${new Date().toISOString().split('T')[0]}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         }
 
-        // Upload data from JSON file
-        function uploadData(event) {
+        // Escape CSV values
+        function escapeCSV(value) {
+            if (typeof value !== 'string') return value;
+            if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+                return '"' + value.replace(/"/g, '""') + '"';
+            }
+            return value;
+        }
+
+        // Upload CSV file
+        function uploadCSV(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const data = JSON.parse(e.target.result);
+                    const csvText = e.target.result;
+                    const entries = parseCSV(csvText);
 
-                    if (!Array.isArray(data)) {
-                        alert('Invalid file format. Please upload a valid JSON array.');
+                    if (entries.length === 0) {
+                        alert('No valid entries found in the CSV file.');
                         return;
                     }
 
@@ -404,30 +470,106 @@
                     if (existingEntries.length > 0) {
                         if (confirm(`You have ${existingEntries.length} existing entries. Do you want to:\n\nOK = Merge with uploaded data\nCancel = Replace all existing data`)) {
                             // Merge
-                            const mergedEntries = [...existingEntries, ...data];
+                            const mergedEntries = [...existingEntries, ...entries];
                             localStorage.setItem('sourdoughEntries', JSON.stringify(mergedEntries));
-                            alert(`Successfully added ${data.length} entries. Total: ${mergedEntries.length}`);
+                            alert(`Successfully added ${entries.length} entries. Total: ${mergedEntries.length}`);
                         } else {
                             // Replace
-                            localStorage.setItem('sourdoughEntries', JSON.stringify(data));
-                            alert(`Successfully replaced all data with ${data.length} entries.`);
+                            localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
+                            alert(`Successfully replaced all data with ${entries.length} entries.`);
                         }
                     } else {
-                        localStorage.setItem('sourdoughEntries', JSON.stringify(data));
-                        alert(`Successfully imported ${data.length} entries.`);
+                        localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
+                        alert(`Successfully imported ${entries.length} entries.`);
                     }
 
                     loadResults();
 
                 } catch (error) {
-                    alert('Error reading file. Please make sure it\'s a valid JSON file.');
+                    alert('Error reading CSV file. Please make sure it\'s a valid CSV file.');
                     console.error('Upload error:', error);
                 }
             };
             reader.readAsText(file);
 
-            // Reset input so the same file can be uploaded again if needed
+            // Reset input
             event.target.value = '';
+        }
+
+        // Parse CSV text into array of objects
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            if (lines.length < 2) return [];
+
+            // Parse headers
+            const headers = parseCSVLine(lines[0]);
+            const entries = [];
+
+            // Parse data rows
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+
+                const values = parseCSVLine(line);
+                if (values.length !== headers.length) continue;
+
+                const entry = {
+                    date: values[0] || '',
+                    feedFlour: values[1] || '',
+                    feedWater: values[2] || '',
+                    tempFeeding: values[3] || '',
+                    feedTime: values[4] || '',
+                    feedRisePercent: values[5] || '',
+                    tempProving: values[6] || '',
+                    riseTime: values[7] || '',
+                    risePercent: values[8] || '',
+                    stretchCount: values[9] || '',
+                    timeLeftRisen: values[10] || '',
+                    cookingTimeLidOn: values[11] || '',
+                    cookingTimeLidOff: values[12] || '',
+                    overall: values[13] || '',
+                    overallNotes: values[14] || '',
+                    taste: values[15] || '',
+                    tasteNotes: values[16] || '',
+                    textureBread: values[17] || '',
+                    textureBreadNotes: values[18] || '',
+                    textureCrust: values[19] || '',
+                    textureCrustNotes: values[20] || ''
+                };
+
+                entries.push(entry);
+            }
+
+            return entries;
+        }
+
+        // Parse a single CSV line, handling quoted values
+        function parseCSVLine(line) {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++; // Skip next quote
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+
+            values.push(current);
+            return values;
         }
 
         // Load results on page load

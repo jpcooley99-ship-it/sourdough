@@ -106,6 +106,7 @@
 
         input[type="text"],
         input[type="number"],
+        textarea,
         select {
             width: 100%;
             padding: 12px 16px;
@@ -117,8 +118,14 @@
             background-color: #f9f9f9;
         }
 
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
         input[type="text"]:hover,
         input[type="number"]:hover,
+        textarea:hover,
         select:hover {
             border-color: #d4c5b0;
             background-color: white;
@@ -126,11 +133,22 @@
 
         input[type="text"]:focus,
         input[type="number"]:focus,
+        textarea:focus,
         select:focus {
             outline: none;
             border-color: #6b5744;
             background-color: white;
             box-shadow: 0 0 0 3px rgba(107, 87, 68, 0.1);
+        }
+
+        .notes-field {
+            margin-top: 15px;
+        }
+
+        .notes-field label {
+            font-size: 0.9em;
+            color: #7f96a0;
+            font-style: italic;
         }
 
         .form-row {
@@ -439,6 +457,10 @@
                         </label>
                     </div>
                 </div>
+                <div class="notes-field">
+                    <label for="overallNotes">Additional Notes (Optional)</label>
+                    <textarea id="overallNotes" name="overallNotes" placeholder="Add any additional thoughts about the overall result..."></textarea>
+                </div>
             </div>
 
             <div class="rating-group">
@@ -485,6 +507,10 @@
                             <span class="rating-label">Excellent</span>
                         </label>
                     </div>
+                </div>
+                <div class="notes-field">
+                    <label for="tasteNotes">Additional Notes (Optional)</label>
+                    <textarea id="tasteNotes" name="tasteNotes" placeholder="Describe the taste in more detail..."></textarea>
                 </div>
             </div>
 
@@ -533,6 +559,10 @@
                         </label>
                     </div>
                 </div>
+                <div class="notes-field">
+                    <label for="textureBreadNotes">Additional Notes (Optional)</label>
+                    <textarea id="textureBreadNotes" name="textureBreadNotes" placeholder="Describe the bread texture and crumb in more detail..."></textarea>
+                </div>
             </div>
 
             <div class="rating-group">
@@ -579,6 +609,10 @@
                             <span class="rating-label">Excellent</span>
                         </label>
                     </div>
+                </div>
+                <div class="notes-field">
+                    <label for="textureCrustNotes">Additional Notes (Optional)</label>
+                    <textarea id="textureCrustNotes" name="textureCrustNotes" placeholder="Describe the crust texture and appearance in more detail..."></textarea>
                 </div>
             </div>
 
