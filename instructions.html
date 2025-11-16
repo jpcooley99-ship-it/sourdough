@@ -12,10 +12,11 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f9f7f4;
             scroll-behavior: smooth;
-            line-height: 1.6;
+            line-height: 1.8;
+            color: #0d0d0e;
         }
 
         .nav-header {
@@ -23,38 +24,41 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 3px solid #d4c5b0;
         }
 
         .nav-header h2 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 1.5em;
+            color: #6b5744;
+            font-size: 1.4em;
+            font-style: italic;
+            font-weight: normal;
         }
 
         .back-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #7f96a0;
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 10px 24px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            background-color: #6a8089;
+            transform: translateY(-1px);
         }
 
         .slide {
@@ -62,120 +66,387 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 100px 40px 60px;
+            padding: 120px 40px 80px;
         }
 
         .slide-content {
-            max-width: 900px;
+            max-width: 800px;
             background: white;
-            padding: 50px;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px 70px;
+            border-radius: 2px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #d4c5b0;
         }
 
         .slide-number {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            background-color: #6b5744;
+            color: #f9f7f4;
+            padding: 8px 20px;
+            border-radius: 2px;
+            font-size: 0.85em;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            font-weight: 700;
+            color: #6b5744;
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            font-weight: normal;
+            font-style: italic;
+            line-height: 1.2;
         }
 
         h2 {
-            color: #2d3748;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-            font-weight: 600;
+            color: #6b5744;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            font-size: 1.6em;
+            font-weight: normal;
+            font-style: italic;
         }
 
         h3 {
-            color: #4a5568;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            color: #7f96a0;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
             font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         p, li {
-            color: #4a5568;
+            color: #0d0d0e;
             font-size: 1.1em;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         ul {
-            margin-left: 25px;
-            margin-bottom: 20px;
+            margin-left: 30px;
+            margin-bottom: 25px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding-left: 5px;
         }
 
         .highlight {
-            background-color: #fef5e7;
-            padding: 20px;
-            border-left: 4px solid #667eea;
-            border-radius: 8px;
-            margin: 20px 0;
+            background-color: #fdf8f0;
+            padding: 25px 30px;
+            border-left: 5px solid #d4c5b0;
+            border-radius: 2px;
+            margin: 30px 0;
         }
 
         .recipe-box {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            padding: 25px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 2px solid #e2e8f0;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 2px;
+            margin: 30px 0;
+            border: 1px solid #e5e5e5;
         }
 
         .recipe-box h3 {
-            color: #667eea;
+            color: #6b5744;
             margin-top: 0;
+            font-style: italic;
+            font-family: Georgia, serif;
+            font-weight: normal;
+            font-size: 1.5em;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-top: 35px;
+            margin-bottom: 18px;
         }
 
         .step-number {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #6b5744;
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            text-align: center;
-            line-height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 700;
-            margin-right: 10px;
+            margin-right: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            flex-shrink: 0;
         }
 
-        .scroll-indicator {
-            position: fixed;
-            bottom: 30px;
+        .step-header h2 {
+            margin: 0;
+        }
+
+        /* Visual Graphics */
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(to bottom, #fdf8f0 0%, #f9f9f9 100%);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 60px;
+            right: 60px;
+            height: 3px;
+            background-color: #d4c5b0;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .timeline-icon {
+            width: 70px;
+            height: 70px;
+            background-color: white;
+            border: 3px solid #d4c5b0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 2em;
+        }
+
+        .timeline-label {
+            font-size: 0.9em;
+            color: #6b5744;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .timeline-time {
+            font-size: 0.85em;
+            color: #7f96a0;
+            margin-top: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Measurement Visual */
+        .measurement-visual {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .measurement-item {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            border: 2px solid #d4c5b0;
+            border-radius: 2px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .measurement-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .measurement-amount {
+            font-size: 1.8em;
+            color: #6b5744;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-bottom: 5px;
+        }
+
+        .measurement-label {
+            font-size: 0.95em;
+            color: #7f96a0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Progress Indicator */
+        .progress-visual {
+            margin: 35px 0;
+            padding: 25px;
+            background-color: #fdf8f0;
+            border-radius: 2px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 40px;
+            background-color: white;
+            border: 2px solid #d4c5b0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #d4c5b0, #6b5744);
+            transition: width 2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Temperature Gauge */
+        .temp-gauge {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border-radius: 2px;
+            margin: 25px 0;
+        }
+
+        .thermometer {
+            width: 60px;
+            height: 200px;
+            background: white;
+            border: 3px solid #d4c5b0;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermometer::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(to top, #c45a3c, #e07856);
+            border-radius: 0 0 30px 30px;
+        }
+
+        .thermometer::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            animation: bounce 2s infinite;
-            color: white;
-            font-size: 2em;
-            opacity: 0.7;
+            width: 35px;
+            height: 35px;
+            background-color: #c45a3c;
+            border-radius: 50%;
+            z-index: 1;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
+        .temp-info {
+            flex: 1;
+        }
+
+        .temp-info h3 {
+            margin-top: 0;
+        }
+
+        /* Ingredient Grid */
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .ingredient-card {
+            background: white;
+            border: 2px solid #d4c5b0;
+            padding: 20px;
+            border-radius: 2px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .ingredient-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .ingredient-emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .ingredient-amount {
+            font-size: 1.4em;
+            color: #6b5744;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .ingredient-name {
+            font-size: 0.95em;
+            color: #7f96a0;
+            margin-top: 5px;
+        }
+
+        /* Ratio Visual */
+        .ratio-visual {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            padding: 25px;
+            background-color: #fdf8f0;
+            border-radius: 2px;
+            justify-content: center;
+        }
+
+        .ratio-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #6b5744;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .ratio-separator {
+            font-size: 2em;
+            color: #d4c5b0;
+            font-weight: bold;
+        }
+
+        .ratio-label {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #6b5744;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .ratio-item {
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -184,26 +455,40 @@
             }
 
             .slide-content {
-                padding: 30px 25px;
+                padding: 40px 30px;
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
 
             h2 {
-                font-size: 1.3em;
+                font-size: 1.4em;
+            }
+
+            .timeline {
+                flex-direction: column;
+                gap: 30px;
+                padding: 30px 20px;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+
+            .measurement-visual {
+                flex-direction: column;
             }
 
             .nav-header h2 {
-                font-size: 1.2em;
+                font-size: 1.1em;
             }
         }
     </style>
 </head>
 <body>
     <div class="nav-header">
-        <h2>🍞 Sourdough Instructions</h2>
+        <h2>🍞 Sourdough Bread: A Guide</h2>
         <a href="index.html" class="back-button">← Home</a>
     </div>
 
@@ -212,20 +497,43 @@
         <div class="slide-content">
             <span class="slide-number">Introduction</span>
             <h1>How to Make Sourdough Bread</h1>
-            <p style="font-size: 1.2em; color: #718096; margin-bottom: 30px;">
+            <p style="font-size: 1.25em; color: #7f96a0; margin-bottom: 40px; font-style: italic;">
                 Follow this step-by-step guide to create delicious homemade sourdough bread.
                 Scroll down to progress through each stage of the baking process.
             </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">🫙</div>
+                    <div class="timeline-label">Maintain</div>
+                    <div class="timeline-time">Ongoing</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">🌾</div>
+                    <div class="timeline-label">Prepare</div>
+                    <div class="timeline-time">4-10 hrs</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">🥖</div>
+                    <div class="timeline-label">Mix & Prove</div>
+                    <div class="timeline-time">5-11 hrs</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">🔥</div>
+                    <div class="timeline-label">Bake</div>
+                    <div class="timeline-time">50-60 min</div>
+                </div>
+            </div>
+
             <div class="highlight">
-                <h3>📋 What You'll Need</h3>
+                <h3>📋 Essential Equipment</h3>
                 <ul>
                     <li>Active sourdough starter (50g maintained)</li>
                     <li>Bread flour (white or wholemeal)</li>
-                    <li>Water</li>
-                    <li>Salt</li>
                     <li>Banneton basket or bowl with tea towel</li>
-                    <li>Dutch oven</li>
-                    <li>Baking paper</li>
+                    <li>Dutch oven for baking</li>
+                    <li>Kitchen scale for accurate measurements</li>
+                    <li>Scoring knife or sharp scissors</li>
                 </ul>
             </div>
         </div>
@@ -237,31 +545,55 @@
             <span class="slide-number">Step 1</span>
             <h1>Starter Maintenance</h1>
 
-            <div class="recipe-box">
-                <h3>Basic Setup</h3>
-                <p><strong>Jar:</strong> 200g (empty without lid)</p>
-                <p><strong>Starter amount:</strong> 50g</p>
+            <div class="measurement-visual">
+                <div class="measurement-item">
+                    <div class="measurement-icon">🫙</div>
+                    <div class="measurement-amount">200g</div>
+                    <div class="measurement-label">Empty Jar Weight</div>
+                </div>
+                <div class="measurement-item">
+                    <div class="measurement-icon">🌾</div>
+                    <div class="measurement-amount">50g</div>
+                    <div class="measurement-label">Starter Amount</div>
+                </div>
             </div>
 
-            <h2>Maintenance Schedule</h2>
+            <h2>Storage & Feeding Schedule</h2>
             <ul>
-                <li>Keep starter in the fridge</li>
+                <li>Keep starter in the refrigerator between uses</li>
                 <li>Feed every three weeks (approximately)</li>
-                <li>Starter is "starving" when there's a layer of black water on top (called hooch)</li>
+                <li>Starter is "starving" when there's a layer of black water on top (called <strong>hooch</strong>)</li>
             </ul>
 
             <div class="highlight">
                 <h3>Dealing with Hooch</h3>
-                <p>You can stir the hooch into the starter for a more sour taste, but I prefer to tip it away.</p>
+                <p>Hooch is a dark liquid that forms on top of neglected starter. You can stir it in for a more sour flavor, but I prefer to pour it off for a milder taste.</p>
             </div>
 
-            <h2>Feeding Instructions</h2>
-            <p><strong>Feeding ratio:</strong> 1:1:1 (use white bread flour)</p>
-            <ul>
-                <li>Don't keep more than 50g for a maintenance feed</li>
-                <li>Tip any excess in the bin (not down the sink)</li>
-                <li>Or save it and bake with it!</li>
-            </ul>
+            <h2>Feeding Ratio</h2>
+            <div class="ratio-visual">
+                <div class="ratio-item">
+                    <div class="ratio-circle">1</div>
+                    <div class="ratio-label">Starter</div>
+                </div>
+                <div class="ratio-separator">:</div>
+                <div class="ratio-item">
+                    <div class="ratio-circle">1</div>
+                    <div class="ratio-label">Water</div>
+                </div>
+                <div class="ratio-separator">:</div>
+                <div class="ratio-item">
+                    <div class="ratio-circle">1</div>
+                    <div class="ratio-label">Flour</div>
+                </div>
+            </div>
+
+            <div class="recipe-box">
+                <h3>Maintenance Feed Formula</h3>
+                <p style="margin-bottom: 10px;"><strong>Use white bread flour</strong></p>
+                <p>I don't recommend having more than 50g for a maintenance feed.</p>
+                <p style="margin-top: 20px; color: #7f96a0; font-style: italic;">💡 Tip any excess in the bin (not down the sink), or save it and bake with it!</p>
+            </div>
         </div>
     </div>
 
@@ -271,34 +603,91 @@
             <span class="slide-number">Step 2</span>
             <h1>Preparing Starter for Baking</h1>
 
-            <h2><span class="step-number">1</span>Big Feed</h2>
-            <p>Take starter out of the fridge and do a big feed.</p>
-            <div class="recipe-box">
-                <h3>Feed Ratio: 1:3:3</h3>
-                <ul>
-                    <li>30g starter</li>
-                    <li>90g water</li>
-                    <li>90g bread flour</li>
-                </ul>
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2>The Big Feed</h2>
+            </div>
+            <p>Take starter out of the fridge and give it a big feed to wake it up.</p>
+
+            <div class="ratio-visual">
+                <div class="ratio-item">
+                    <div class="ratio-circle">1</div>
+                    <div class="ratio-label">Starter</div>
+                </div>
+                <div class="ratio-separator">:</div>
+                <div class="ratio-item">
+                    <div class="ratio-circle">3</div>
+                    <div class="ratio-label">Water</div>
+                </div>
+                <div class="ratio-separator">:</div>
+                <div class="ratio-item">
+                    <div class="ratio-circle">3</div>
+                    <div class="ratio-label">Flour</div>
+                </div>
             </div>
 
-            <h2><span class="step-number">2</span>Wait for Doubling</h2>
-            <ul>
-                <li>Leave until starter has doubled in size</li>
-                <li>Takes 4-10 hours (depending on temperature)</li>
-                <li>Keep lid loose so starter has enough oxygen</li>
-            </ul>
+            <div class="ingredient-grid">
+                <div class="ingredient-card">
+                    <div class="ingredient-emoji">🌾</div>
+                    <div class="ingredient-amount">30g</div>
+                    <div class="ingredient-name">Starter</div>
+                </div>
+                <div class="ingredient-card">
+                    <div class="ingredient-emoji">💧</div>
+                    <div class="ingredient-amount">90g</div>
+                    <div class="ingredient-name">Water</div>
+                </div>
+                <div class="ingredient-card">
+                    <div class="ingredient-emoji">🌾</div>
+                    <div class="ingredient-amount">90g</div>
+                    <div class="ingredient-name">Bread Flour</div>
+                </div>
+            </div>
 
-            <h2><span class="step-number">3</span>Mix Your Dough</h2>
-            <p>When starter has doubled in size, mix together:</p>
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2>Wait for Activity</h2>
+            </div>
+
+            <div class="progress-visual">
+                <p><strong>Leave until starter has doubled in size</strong></p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 100%;">2x Size ✓</div>
+                </div>
+                <p style="margin-top: 10px; color: #7f96a0; font-style: italic;">⏱️ Takes 4-10 hours depending on room temperature</p>
+                <p style="color: #7f96a0; font-style: italic;">💨 Keep lid loose for oxygen</p>
+            </div>
+
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2>Mix Your Dough</h2>
+            </div>
+            <p>When starter has doubled, mix together:</p>
+
             <div class="recipe-box">
                 <h3>Dough Ingredients</h3>
-                <ul>
-                    <li>100g starter (active)</li>
-                    <li>300g water</li>
-                    <li>450g bread flour (white or wholemeal as you fancy)</li>
-                    <li>10g salt</li>
-                </ul>
+                <div class="ingredient-grid" style="margin-top: 20px;">
+                    <div class="ingredient-card">
+                        <div class="ingredient-emoji">✨</div>
+                        <div class="ingredient-amount">100g</div>
+                        <div class="ingredient-name">Active Starter</div>
+                    </div>
+                    <div class="ingredient-card">
+                        <div class="ingredient-emoji">💧</div>
+                        <div class="ingredient-amount">300g</div>
+                        <div class="ingredient-name">Water</div>
+                    </div>
+                    <div class="ingredient-card">
+                        <div class="ingredient-emoji">🌾</div>
+                        <div class="ingredient-amount">450g</div>
+                        <div class="ingredient-name">Bread Flour</div>
+                    </div>
+                    <div class="ingredient-card">
+                        <div class="ingredient-emoji">🧂</div>
+                        <div class="ingredient-amount">10g</div>
+                        <div class="ingredient-name">Salt</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -309,31 +698,72 @@
             <span class="slide-number">Step 3</span>
             <h1>Mixing & Proving</h1>
 
-            <h2><span class="step-number">1</span>Initial Mix</h2>
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2>Initial Mix</h2>
+            </div>
             <ul>
-                <li>Mix ingredients together</li>
-                <li>Optional: put 40g of mixture in a small jar (to track proving)</li>
+                <li>Mix all ingredients together until combined</li>
+                <li>Optional: put 40g of mixture in a small jar (to track proving progress)</li>
                 <li><strong>Do not over mix</strong> - mixture should be well combined but shaggy in texture</li>
-                <li>Cover with tea towel/hair cap/cling film</li>
-                <li>Leave in warm place for 30 mins</li>
-            </ul>
-
-            <h2><span class="step-number">2</span>Stretch and Fold</h2>
-            <ul>
-                <li>After 30 mins: do 4x stretch and fold</li>
-                <li>If adding seeds or filling, do it during stretch and fold</li>
-                <li>Cover and leave for another 30 mins</li>
-                <li>Do 3 more rounds of stretch and fold</li>
-            </ul>
-
-            <h2><span class="step-number">3</span>Bulk Fermentation</h2>
-            <ul>
-                <li>Cover and leave for 4-10 hours</li>
-                <li><strong>When your cup is full, your dough is proved</strong></li>
+                <li>Cover with tea towel, hair cap, or cling film</li>
             </ul>
 
             <div class="highlight">
-                <p><strong>Tip:</strong> The small jar of dough acts as a visual indicator - when it doubles, your main dough is ready!</p>
+                <p style="text-align: center; font-size: 1.8em; margin: 20px 0;">⏱️ Rest 30 minutes</p>
+            </div>
+
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2>Stretch and Fold Sequence</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">🙌</div>
+                    <div class="timeline-label">4× Folds</div>
+                    <div class="timeline-time">Round 1</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">⏱️</div>
+                    <div class="timeline-label">Wait</div>
+                    <div class="timeline-time">30 min</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">🙌</div>
+                    <div class="timeline-label">3× More</div>
+                    <div class="timeline-time">Rounds 2-4</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Adding Mix-Ins</h3>
+                <p>If you're adding seeds or filling, incorporate them during the stretch and fold process.</p>
+            </div>
+
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2>Bulk Fermentation</h2>
+            </div>
+
+            <div class="progress-visual">
+                <p><strong>Cover and leave for bulk fermentation</strong></p>
+                <div style="display: flex; gap: 30px; margin: 20px 0; align-items: center;">
+                    <div style="flex: 1;">
+                        <div style="width: 100px; height: 100px; margin: 0 auto; border: 3px dashed #d4c5b0; border-radius: 2px; display: flex; align-items: center; justify-content: center; background: white;">
+                            <div style="font-size: 2.5em;">📏</div>
+                        </div>
+                        <p style="text-align: center; margin-top: 10px; font-size: 0.9em;">Start</p>
+                    </div>
+                    <div style="font-size: 2em; color: #d4c5b0;">→</div>
+                    <div style="flex: 1;">
+                        <div style="width: 100px; height: 100px; margin: 0 auto; border: 3px solid #6b5744; border-radius: 2px; display: flex; align-items: center; justify-content: center; background: #fdf8f0;">
+                            <div style="font-size: 2.5em;">📏</div>
+                        </div>
+                        <p style="text-align: center; margin-top: 10px; font-size: 0.9em; font-weight: bold;">Doubled!</p>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #7f96a0; font-style: italic;">⏱️ 4-10 hours • When your cup is full, your dough is proved!</p>
             </div>
         </div>
     </div>
@@ -344,32 +774,52 @@
             <span class="slide-number">Step 4</span>
             <h1>Shaping & Cold Prove</h1>
 
-            <h2><span class="step-number">1</span>Shape the Dough</h2>
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2>Pre-Shape</h2>
+            </div>
             <ul>
                 <li>Tip dough onto a well-floured surface</li>
-                <li>Shape into a square</li>
-                <li><strong>Be careful not to burst any air bubbles</strong></li>
+                <li>Gently shape into a square</li>
+                <li><strong>Be careful not to burst any air bubbles</strong> - they create the lovely open crumb!</li>
                 <li>Fold in sides and roll the dough up into a ball</li>
             </ul>
 
-            <h2><span class="step-number">2</span>Build Tension</h2>
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2>Build Tension</h2>
+            </div>
+            <div class="highlight">
+                <p>Push and pull the dough ball in a series of motions to build surface tension. This creates a taut outer "skin" that helps the bread rise properly during baking.</p>
+                <p style="margin-top: 15px; font-style: italic;">Add more flour to your surface if the dough is sticking.</p>
+            </div>
+
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2>Into the Banneton</h2>
+            </div>
             <ul>
-                <li>Complete a series of pushing and pulling the dough ball to build tension</li>
-                <li>Add more flour to surface if needed</li>
+                <li>When the ball looks smooth and taut, pick it up carefully</li>
+                <li>Place it <strong>upside down</strong> in a well-floured banneton basket</li>
+                <li>Don't have a banneton? Flour a tea towel generously and line a bowl with it</li>
             </ul>
 
-            <h2><span class="step-number">3</span>Into the Banneton</h2>
-            <ul>
-                <li>When the ball looks good, pick it up</li>
-                <li>Place it upside down in a well-floured banneton basket</li>
-                <li>Don't have a banneton? Flour a tea towel and put it in a bowl</li>
-            </ul>
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2>Cold Prove in Refrigerator</h2>
+            </div>
 
-            <h2><span class="step-number">4</span>Cold Prove</h2>
             <div class="recipe-box">
-                <p>Cover and put in the fridge to cold prove</p>
-                <p><strong>Time range:</strong> 10 hours - 3 days</p>
-                <p>This develops flavor and makes scoring easier!</p>
+                <div style="text-align: center;">
+                    <div style="font-size: 4em; margin: 20px 0;">🧊</div>
+                    <h3>Refrigerate for Cold Prove</h3>
+                    <div style="margin: 25px 0;">
+                        <div class="progress-bar-container" style="max-width: 400px; margin: 20px auto;">
+                            <div class="progress-bar" style="width: 100%;">10hrs - 3 days</div>
+                        </div>
+                    </div>
+                    <p style="color: #7f96a0; font-style: italic;">This develops deep flavor and makes scoring much easier!</p>
+                </div>
             </div>
         </div>
     </div>
@@ -378,37 +828,76 @@
     <div class="slide">
         <div class="slide-content">
             <span class="slide-number">Step 5</span>
-            <h1>Baking</h1>
+            <h1>Baking Your Bread</h1>
 
-            <h2><span class="step-number">1</span>Preheat Dutch Oven</h2>
-            <ul>
-                <li>Put dutch oven in the oven for 20-30 mins</li>
-                <li>Set to high heat (around 200°C)</li>
-            </ul>
-
-            <h2><span class="step-number">2</span>Prepare to Bake</h2>
-            <ul>
-                <li>After 30 mins, place dough on baking paper</li>
-                <li>Score the top (scissors work, but a scoring knife is ideal)</li>
-            </ul>
-
-            <h2><span class="step-number">3</span>Bake with Lid On</h2>
-            <div class="recipe-box">
-                <p>Put dough in dutch oven</p>
-                <p><strong>Bake with lid on:</strong> 25-30 mins</p>
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2>Preheat Dutch Oven</h2>
             </div>
 
-            <h2><span class="step-number">4</span>Bake with Lid Off</h2>
+            <div class="temp-gauge">
+                <div class="thermometer"></div>
+                <div class="temp-info">
+                    <h3>Heat Dutch Oven</h3>
+                    <p><strong>Temperature:</strong> 200°C (400°F)</p>
+                    <p><strong>Time:</strong> 20-30 minutes</p>
+                    <p style="color: #7f96a0; margin-top: 10px; font-style: italic;">The pot needs to be screaming hot for that perfect crust!</p>
+                </div>
+            </div>
+
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2>Prepare & Score</h2>
+            </div>
+            <ul>
+                <li>Carefully turn out dough onto baking paper</li>
+                <li>Score the top with a sharp knife or scissors (this controls how the bread expands)</li>
+                <li>Be decisive with your cuts - quick, confident slashes work best</li>
+            </ul>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">🔥</div>
+                    <div class="timeline-label">Lid On</div>
+                    <div class="timeline-time">25-30 min</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">🌡️</div>
+                    <div class="timeline-label">Steam Build</div>
+                    <div class="timeline-time">Rising</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">✨</div>
+                    <div class="timeline-label">Lid Off</div>
+                    <div class="timeline-time">25-30 min</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">🍞</div>
+                    <div class="timeline-label">Golden!</div>
+                    <div class="timeline-time">Done</div>
+                </div>
+            </div>
+
             <div class="recipe-box">
-                <p><strong>Bake with lid off:</strong> 25-30 mins</p>
-                <p>This creates that beautiful golden crust!</p>
+                <h3>Baking Schedule</h3>
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <div style="background: #6b5744; color: white; padding: 10px 20px; border-radius: 2px; font-weight: bold; min-width: 150px; text-align: center;">LID ON</div>
+                        <div>25-30 minutes at 200°C</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="background: #d4c5b0; color: #6b5744; padding: 10px 20px; border-radius: 2px; font-weight: bold; min-width: 150px; text-align: center;">LID OFF</div>
+                        <div>25-30 minutes at 200°C</div>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #7f96a0; font-style: italic;">The lid traps steam for oven spring, then removing it creates the golden crust.</p>
             </div>
 
             <div class="highlight">
-                <h3>⏰ Important: Cooling Time</h3>
-                <p><strong>Wait at least 1 hour before cutting</strong> (ideally until bread is cool)</p>
-                <p>If you cut it when it's too hot, the bread will lose shape and be gummy in texture.</p>
-                <p><em>Exception:</em> If you'll eat the whole loaf in one go, go wild and eat it warm!</p>
+                <h3 style="text-align: center;">⏰ Cooling is Critical!</h3>
+                <p style="text-align: center; font-size: 1.15em; margin: 20px 0;"><strong>Wait at least 1 hour before cutting</strong></p>
+                <p>Ideally, wait until the bread is completely cool. If you cut it when it's too hot, the interior will be gummy and the bread will lose its shape as it deflates.</p>
+                <p style="margin-top: 15px; color: #7f96a0; font-style: italic;"><strong>Exception:</strong> If you're eating the whole loaf in one sitting, go ahead and enjoy it warm!</p>
             </div>
         </div>
     </div>
@@ -419,42 +908,49 @@
             <span class="slide-number">Final Tips</span>
             <h1>Serving & Storage</h1>
 
-            <h2>🔪 Cutting Your Bread</h2>
-            <div class="highlight">
-                <p><strong>Pro tip:</strong> Cut from the middle of the loaf, not the end</p>
-                <p>This helps keep the bread fresh longer!</p>
+            <div class="measurement-visual">
+                <div class="measurement-item">
+                    <div class="measurement-icon">🔪</div>
+                    <div class="measurement-amount" style="font-size: 1.3em;">Cut Center</div>
+                    <div class="measurement-label">Not the ends first</div>
+                </div>
+                <div class="measurement-item">
+                    <div class="measurement-icon">❄️</div>
+                    <div class="measurement-amount" style="font-size: 1.3em;">Freezes Well</div>
+                    <div class="measurement-label">Slice before freezing</div>
+                </div>
             </div>
 
-            <h2>❄️ Freezing</h2>
-            <p style="font-size: 1.2em;">This bread freezes very well! Slice before freezing for easy toast.</p>
+            <div class="highlight">
+                <h3>🔪 Cutting Technique</h3>
+                <p style="font-size: 1.15em;">Cut from the middle of the loaf, not the end. This keeps both cut surfaces together, preventing the bread from drying out quickly.</p>
+            </div>
 
-            <h2>🎉 Enjoy!</h2>
-            <p style="font-size: 1.3em; color: #667eea; font-weight: 600; margin-top: 40px;">
-                You've now made your own sourdough bread from scratch.
-                Don't forget to log your results in the tracker!
-            </p>
+            <div class="recipe-box">
+                <h3>Storage Tips</h3>
+                <ul style="margin-top: 15px;">
+                    <li><strong>Counter:</strong> Store cut-side down on a cutting board for 2-3 days</li>
+                    <li><strong>Bread box:</strong> Keeps crust crispy while maintaining interior moisture</li>
+                    <li><strong>Freezer:</strong> Slice before freezing for easy toast - lasts up to 3 months</li>
+                    <li><strong>Avoid:</strong> Plastic bags make the crust soft and chewy</li>
+                </ul>
+            </div>
 
-            <div style="margin-top: 40px; display: flex; gap: 15px; flex-wrap: wrap;">
-                <a href="form.html" class="back-button" style="flex: 1; text-align: center; min-width: 200px;">
-                    Log Your Results →
-                </a>
-                <a href="index.html" class="back-button" style="flex: 1; text-align: center; min-width: 200px; background: white; color: #667eea; border: 2px solid #667eea;">
-                    ← Back to Home
-                </a>
+            <div style="text-align: center; margin: 50px 0; padding: 40px; background: linear-gradient(to bottom, #fdf8f0, #f9f9f9); border-radius: 2px;">
+                <h2 style="margin-top: 0; font-size: 2.2em; color: #6b5744;">🎉 Congratulations!</h2>
+                <p style="font-size: 1.25em; color: #7f96a0; margin: 20px 0;">You've mastered the art of sourdough bread baking.</p>
+                <p style="font-size: 1.1em; margin-bottom: 35px;">Now it's time to track your results and perfect your technique!</p>
+
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 30px;">
+                    <a href="form.html" class="back-button" style="flex: 1; text-align: center; min-width: 200px; padding: 15px 30px; font-size: 15px;">
+                        Log Your Results →
+                    </a>
+                    <a href="index.html" class="back-button" style="flex: 1; text-align: center; min-width: 200px; padding: 15px 30px; font-size: 15px; background: white; color: #7f96a0; border: 2px solid #7f96a0;">
+                        ← Back to Home
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        // Hide scroll indicator when user scrolls
-        let scrollIndicator = document.querySelector('.scroll-indicator');
-        if (scrollIndicator) {
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 100) {
-                    scrollIndicator.style.display = 'none';
-                }
-            });
-        }
-    </script>
 </body>
 </html>
