@@ -616,11 +616,73 @@
                 </div>
             </div>
 
-            <button type="submit">Save Bread Entry</button>
+            <button type="submit" id="submitBtn">Save Bread Entry</button>
+            <button type="button" id="cancelBtn" style="display: none; margin-top: 10px; background-color: #7f96a0;" onclick="cancelEdit()">Cancel Edit</button>
         </form>
     </div>
 
     <script>
+        // Check if we're editing an entry
+        const urlParams = new URLSearchParams(window.location.search);
+        const editIndex = urlParams.get('edit');
+        let isEditing = false;
+
+        if (editIndex !== null) {
+            loadEntryForEdit(editIndex);
+        }
+
+        function loadEntryForEdit(index) {
+            const entries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
+            const entry = entries[index];
+
+            if (!entry) {
+                alert('Entry not found!');
+                window.location.href = 'form.html';
+                return;
+            }
+
+            isEditing = true;
+
+            // Populate all form fields
+            document.getElementById('feedFlour').value = entry.feedFlour || '';
+            document.getElementById('feedWater').value = entry.feedWater || '';
+            document.getElementById('tempFeeding').value = entry.tempFeeding || '';
+            document.getElementById('feedTime').value = entry.feedTime || '';
+            document.getElementById('feedRisePercent').value = entry.feedRisePercent || '';
+            document.getElementById('tempProving').value = entry.tempProving || '';
+            document.getElementById('riseTime').value = entry.riseTime || '';
+            document.getElementById('risePercent').value = entry.risePercent || '';
+            document.getElementById('stretchCount').value = entry.stretchCount || '';
+            document.getElementById('timeLeftRisen').value = entry.timeLeftRisen || '';
+            document.getElementById('cookingTimeLidOn').value = entry.cookingTimeLidOn || '';
+            document.getElementById('cookingTimeLidOff').value = entry.cookingTimeLidOff || '';
+
+            // Set radio buttons for ratings
+            if (entry.overall) document.getElementById(`overall${entry.overall}`).checked = true;
+            if (entry.taste) document.getElementById(`taste${entry.taste}`).checked = true;
+            if (entry.textureBread) document.getElementById(`textureBread${entry.textureBread}`).checked = true;
+            if (entry.textureCrust) document.getElementById(`textureCrust${entry.textureCrust}`).checked = true;
+
+            // Set notes fields
+            document.getElementById('overallNotes').value = entry.overallNotes || '';
+            document.getElementById('tasteNotes').value = entry.tasteNotes || '';
+            document.getElementById('textureBreadNotes').value = entry.textureBreadNotes || '';
+            document.getElementById('textureCrustNotes').value = entry.textureCrustNotes || '';
+
+            // Update button text and show cancel button
+            document.getElementById('submitBtn').textContent = 'Update Entry';
+            document.getElementById('cancelBtn').style.display = 'block';
+
+            // Store the edit index
+            document.getElementById('sourdoughForm').dataset.editIndex = index;
+        }
+
+        function cancelEdit() {
+            if (confirm('Are you sure you want to cancel editing? Any changes will be lost.')) {
+                window.location.href = 'form.html';
+            }
+        }
+
         document.getElementById('sourdoughForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -631,27 +693,43 @@
                 data[key] = value;
             });
 
-            // Add timestamp
-            data.date = new Date().toLocaleString();
-
             // Get existing entries from localStorage
             const entries = JSON.parse(localStorage.getItem('sourdoughEntries') || '[]');
 
-            // Add new entry
-            entries.push(data);
+            if (isEditing) {
+                // Update existing entry
+                const index = parseInt(this.dataset.editIndex);
+                data.date = entries[index].date; // Keep original date
+                entries[index] = data;
 
-            // Save back to localStorage
-            localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
+                // Save back to localStorage
+                localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
 
-            // Show success message
-            alert('Entry saved successfully! 🍞');
+                // Show success message
+                alert('Entry updated successfully! 🍞');
 
-            // Reset the form
-            this.reset();
-
-            // Optionally redirect to results page
-            if (confirm('Would you like to view all your results?')) {
+                // Redirect to results page
                 window.location.href = 'results.html';
+            } else {
+                // Add timestamp for new entry
+                data.date = new Date().toLocaleString();
+
+                // Add new entry
+                entries.push(data);
+
+                // Save back to localStorage
+                localStorage.setItem('sourdoughEntries', JSON.stringify(entries));
+
+                // Show success message
+                alert('Entry saved successfully! 🍞');
+
+                // Reset the form
+                this.reset();
+
+                // Optionally redirect to results page
+                if (confirm('Would you like to view all your results?')) {
+                    window.location.href = 'results.html';
+                }
             }
         });
     </script>

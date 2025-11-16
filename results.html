@@ -204,8 +204,7 @@
             transform: translateY(-1px);
         }
 
-        .delete-btn {
-            background-color: #c45a3c;
+        .delete-btn, .edit-btn {
             color: white;
             border: none;
             padding: 6px 12px;
@@ -217,10 +216,24 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            margin-right: 5px;
+        }
+
+        .delete-btn {
+            background-color: #c45a3c;
         }
 
         .delete-btn:hover {
             background-color: #a84d31;
+            transform: scale(1.05);
+        }
+
+        .edit-btn {
+            background-color: #7f96a0;
+        }
+
+        .edit-btn:hover {
+            background-color: #6a8089;
             transform: scale(1.05);
         }
 
@@ -357,7 +370,10 @@
                         <td class="notes-cell">${entry.textureBreadNotes || '-'}</td>
                         <td>${crustTextureText}</td>
                         <td class="notes-cell">${entry.textureCrustNotes || '-'}</td>
-                        <td><button class="delete-btn" onclick="deleteEntry(${index})">Delete</button></td>
+                        <td>
+                            <button class="edit-btn" onclick="editEntry(${index})">Edit</button>
+                            <button class="delete-btn" onclick="deleteEntry(${index})">Delete</button>
+                        </td>
                     </tr>
                 `;
             });
@@ -368,6 +384,11 @@
             `;
 
             resultsContent.innerHTML = tableHTML;
+        }
+
+        // Edit an entry
+        function editEntry(index) {
+            window.location.href = `form.html?edit=${index}`;
         }
 
         // Delete an entry
