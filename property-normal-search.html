@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normal Property Search</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background-color: #f9f7f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 3px solid #d4c5b0;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            color: #6b5744;
+            text-decoration: none;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: #6b5744;
+            margin-bottom: 10px;
+        }
+
+        .search-form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 3px solid #d4c5b0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #6b5744;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #d4c5b0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: Georgia, serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6b5744;
+        }
+
+        .price-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #6b5744;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #524131;
+        }
+
+        .ai-search-hint {
+            background: linear-gradient(135deg, #e8eaff 0%, #f0e6ff 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #d4d4ff;
+            text-align: center;
+        }
+
+        .ai-search-hint p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .ai-search-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .ai-search-link:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .price-range {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="property-search.html" class="back-link">← Back</a>
+            <h1>Property Search</h1>
+            <p style="color: #666; margin-top: 10px;">Use filters below to find your ideal property</p>
+        </div>
+
+        <form class="search-form" id="searchForm">
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" placeholder="e.g., London, Manchester, Birmingham" required>
+            </div>
+
+            <div class="form-group">
+                <label>Price Range</label>
+                <div class="price-range">
+                    <div>
+                        <input type="number" id="minPrice" placeholder="Min Price (£)" min="0" step="1000">
+                    </div>
+                    <div>
+                        <input type="number" id="maxPrice" placeholder="Max Price (£)" min="0" step="1000">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="bedrooms">Bedrooms</label>
+                <select id="bedrooms">
+                    <option value="">Any</option>
+                    <option value="1">1 bedroom</option>
+                    <option value="2">2 bedrooms</option>
+                    <option value="3">3 bedrooms</option>
+                    <option value="4">4 bedrooms</option>
+                    <option value="5">5+ bedrooms</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="propertyType">Property Type</label>
+                <select id="propertyType">
+                    <option value="">Any</option>
+                    <option value="House">House</option>
+                    <option value="Flat">Flat/Apartment</option>
+                    <option value="Bungalow">Bungalow</option>
+                    <option value="Cottage">Cottage</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Features</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" value="Garden"> Garden
+                    </label>
+                    <label>
+                        <input type="checkbox" value="Parking"> Parking
+                    </label>
+                    <label>
+                        <input type="checkbox" value="Near schools"> Near Schools
+                    </label>
+                    <label>
+                        <input type="checkbox" value="Good transport"> Good Transport
+                    </label>
+                    <label>
+                        <input type="checkbox" value="Balcony"> Balcony
+                    </label>
+                    <label>
+                        <input type="checkbox" value="Garage"> Garage
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Search Properties</button>
+        </form>
+
+        <div class="ai-search-hint">
+            <p>💡 <strong>Tip:</strong> Not sure what you're looking for? Try our AI-powered search instead!</p>
+            <a href="property-ai-chat.html" class="ai-search-link">✨ Try AI Search</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const location = document.getElementById('location').value;
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const bedrooms = document.getElementById('bedrooms').value;
+            const propertyType = document.getElementById('propertyType').value;
+
+            // Collect selected features
+            const features = [];
+            document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked').forEach(cb => {
+                features.push(cb.value);
+            });
+
+            // Create preferences object
+            const preferences = {
+                location: location,
+                minPrice: minPrice ? parseInt(minPrice) : null,
+                maxPrice: maxPrice ? parseInt(maxPrice) : null,
+                bedrooms: bedrooms ? parseInt(bedrooms) : null,
+                propertyType: propertyType || null,
+                features: features,
+                lifestyle: []
+            };
+
+            // Save to localStorage
+            localStorage.setItem('propertySearchPreferences', JSON.stringify(preferences));
+
+            // Redirect to results
+            window.location.href = 'property-results.html';
+        });
+    </script>
+</body>
+</html>
