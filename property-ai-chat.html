@@ -62,15 +62,19 @@
             margin: 0 auto;
             background: white;
             box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            min-height: 0;
         }
 
         .messages {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 30px;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-height: 0;
+            scroll-behavior: smooth;
         }
 
         .message {
@@ -312,11 +316,12 @@
             features: [],
             lifestyle: []
         };
+        let askedQuestions = new Set();
 
         // Initialize chat
         function init() {
-            addAIMessage("Hello! I'm your AI property assistant. I'll help you find your perfect property through a natural conversation. Let me ask you a few questions to understand what you're looking for. Where would you like to live?");
-            showQuickResponses(['London', 'Manchester', 'Birmingham', 'Other location']);
+            addAIMessage("Hello! I'm your AI property assistant. I'll help you find your perfect property through a natural conversation. Tell me what you're looking for, or I can guide you with questions. What kind of property are you interested in?");
+            showQuickResponses(['Guide me with questions', 'Let me describe what I want']);
         }
 
         // Add message to chat
@@ -337,8 +342,10 @@
             messageDiv.appendChild(contentDiv);
             messagesDiv.appendChild(messageDiv);
 
-            // Scroll to bottom
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            // Scroll to bottom with a slight delay to ensure content is rendered
+            setTimeout(() => {
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 10);
 
             return messageDiv;
         }
@@ -351,6 +358,224 @@
         function addAIMessage(content) {
             conversationHistory.push({ role: 'ai', content });
             addMessage(content, false);
+        }
+
+        // Smart extraction functions
+        function extractInformation(input) {
+            const lowerInput = input.toLowerCase();
+            const extracted = {};
+
+            // Extract location (cities, areas)
+            const locations = ['london', 'manchester', 'birmingham', 'leeds', 'liverpool', 'bristol', 'edinburgh', 'glasgow'];
+            for (const loc of locations) {
+                if (lowerInput.includes(loc)) {
+                    extracted.location = loc.charAt(0).toUpperCase() + loc.slice(1);
+                    break;
+                }
+            }
+
+            // Extract price/budget
+            const pricePatterns = [
+                { pattern: /(\d+)k/g, multiplier: 1000 },
+                { pattern: /£(\d+),?(\d+)/g, multiplier: 1 },
+                { pattern: /(\d+)\s*thousand/gi, multiplier: 1000 }
+            ];
+
+            for (const { pattern, multiplier } of pricePatterns) {
+                const matches = [...input.matchAll(pattern)];
+                if (matches.length > 0) {
+                    const prices = matches.map(m => {
+                        if (m[2]) return parseInt(m[1] + m[2]) * multiplier;
+                        return parseInt(m[1]) * multiplier;
+                    });
+
+                    if (lowerInput.includes('under') || lowerInput.includes('max') || lowerInput.includes('up to')) {
+                        extracted.maxPrice = Math.max(...prices);
+                    } else if (prices.length === 2) {
+                        extracted.minPrice = Math.min(...prices);
+                        extracted.maxPrice = Math.max(...prices);
+                    } else {
+                        extracted.maxPrice = prices[0];
+                    }
+                    break;
+                }
+            }
+
+            // Extract bedrooms
+            const bedroomMatch = input.match(/(\d+)\s*(bed|bedroom)/i);
+            if (bedroomMatch) {
+                extracted.bedrooms = parseInt(bedroomMatch[1]);
+            }
+
+            // Extract property type
+            const propertyTypes = {
+                'house': 'House',
+                'flat': 'Flat',
+                'apartment': 'Flat',
+                'bungalow': 'Bungalow',
+                'cottage': 'Cottage',
+                'terrace': 'House',
+                'detached': 'House',
+                'semi-detached': 'House'
+            };
+
+            for (const [key, value] of Object.entries(propertyTypes)) {
+                if (lowerInput.includes(key)) {
+                    extracted.propertyType = value;
+                    break;
+                }
+            }
+
+            // Extract features
+            const featureMap = {
+                'garden': 'Garden',
+                'parking': 'Parking',
+                'garage': 'Garage',
+                'school': 'Near schools',
+                'transport': 'Good transport',
+                'balcony': 'Balcony',
+                'driveway': 'Parking'
+            };
+
+            extracted.features = [];
+            for (const [key, value] of Object.entries(featureMap)) {
+                if (lowerInput.includes(key)) {
+                    if (!extracted.features.includes(value)) {
+                        extracted.features.push(value);
+                    }
+                }
+            }
+
+            // Extract lifestyle preferences
+            const lifestyleMap = {
+                'quiet': 'Quiet area',
+                'family': 'Family-friendly',
+                'nature': 'Close to nature',
+                'city center': 'City center',
+                'nightlife': 'Vibrant nightlife'
+            };
+
+            extracted.lifestyle = [];
+            for (const [key, value] of Object.entries(lifestyleMap)) {
+                if (lowerInput.includes(key)) {
+                    extracted.lifestyle.push(value);
+                }
+            }
+
+            return extracted;
+        }
+
+        function updatePreferences(extracted) {
+            let updated = [];
+
+            if (extracted.location && !userPreferences.location) {
+                userPreferences.location = extracted.location;
+                updated.push(`location: ${extracted.location}`);
+                askedQuestions.add('location');
+            }
+
+            if (extracted.minPrice && !userPreferences.minPrice) {
+                userPreferences.minPrice = extracted.minPrice;
+                updated.push(`min price: £${(extracted.minPrice / 1000).toFixed(0)}k`);
+            }
+
+            if (extracted.maxPrice && !userPreferences.maxPrice) {
+                userPreferences.maxPrice = extracted.maxPrice;
+                updated.push(`max price: £${(extracted.maxPrice / 1000).toFixed(0)}k`);
+                askedQuestions.add('price');
+            }
+
+            if (extracted.bedrooms && !userPreferences.bedrooms) {
+                userPreferences.bedrooms = extracted.bedrooms;
+                updated.push(`${extracted.bedrooms} bedrooms`);
+                askedQuestions.add('bedrooms');
+            }
+
+            if (extracted.propertyType && !userPreferences.propertyType) {
+                userPreferences.propertyType = extracted.propertyType;
+                updated.push(`property type: ${extracted.propertyType}`);
+                askedQuestions.add('propertyType');
+            }
+
+            if (extracted.features.length > 0) {
+                extracted.features.forEach(f => {
+                    if (!userPreferences.features.includes(f)) {
+                        userPreferences.features.push(f);
+                        updated.push(`feature: ${f}`);
+                    }
+                });
+                askedQuestions.add('features');
+            }
+
+            if (extracted.lifestyle.length > 0) {
+                extracted.lifestyle.forEach(l => {
+                    if (!userPreferences.lifestyle.includes(l)) {
+                        userPreferences.lifestyle.push(l);
+                        updated.push(`lifestyle: ${l}`);
+                    }
+                });
+                askedQuestions.add('lifestyle');
+            }
+
+            return updated;
+        }
+
+        function getNextQuestion() {
+            // Check what's missing and ask accordingly
+            if (!userPreferences.location && !askedQuestions.has('location')) {
+                askedQuestions.add('location');
+                return {
+                    question: "Where would you like to live?",
+                    suggestions: ['London', 'Manchester', 'Birmingham', 'Other location']
+                };
+            }
+
+            if (!userPreferences.maxPrice && !askedQuestions.has('price')) {
+                askedQuestions.add('price');
+                return {
+                    question: "What's your budget? You can tell me your maximum price or a range.",
+                    suggestions: ['Under £250k', '£250k - £500k', '£500k - £1M', 'Over £1M']
+                };
+            }
+
+            if (!userPreferences.bedrooms && !askedQuestions.has('bedrooms')) {
+                askedQuestions.add('bedrooms');
+                return {
+                    question: "How many bedrooms do you need?",
+                    suggestions: ['1 bedroom', '2 bedrooms', '3 bedrooms', '4+ bedrooms']
+                };
+            }
+
+            if (!userPreferences.propertyType && !askedQuestions.has('propertyType')) {
+                askedQuestions.add('propertyType');
+                return {
+                    question: "What type of property are you interested in?",
+                    suggestions: ['House', 'Flat/Apartment', 'Bungalow', 'Any type']
+                };
+            }
+
+            if (userPreferences.features.length === 0 && !askedQuestions.has('features')) {
+                askedQuestions.add('features');
+                return {
+                    question: "Are there any specific features you're looking for? For example: garden, parking, near schools, good transport links, etc. Just tell me what's important to you.",
+                    suggestions: ['Garden', 'Parking', 'Near schools', 'Good transport', 'No specific features']
+                };
+            }
+
+            if (userPreferences.lifestyle.length === 0 && !askedQuestions.has('lifestyle')) {
+                askedQuestions.add('lifestyle');
+                return {
+                    question: "Tell me about your lifestyle or what you value in a neighborhood. For example: quiet area, family-friendly, close to nature, etc.",
+                    suggestions: ['Quiet area', 'Family-friendly', 'Close to nature', 'City center', 'Skip this']
+                };
+            }
+
+            return null;
+        }
+
+        function isSearchComplete() {
+            // Minimum requirements: location OR (bedrooms AND price)
+            return (userPreferences.location || (userPreferences.bedrooms && userPreferences.maxPrice));
         }
 
         // Show typing indicator
@@ -400,8 +625,6 @@
         }
 
         // AI response logic
-        let conversationStep = 0;
-
         function handleUserInput(input) {
             if (!input.trim()) return;
 
@@ -418,80 +641,77 @@
         }
 
         function generateAIResponse(userInput) {
-            conversationStep++;
             const lowerInput = userInput.toLowerCase();
 
-            // Step 1: Location
-            if (conversationStep === 1) {
-                userPreferences.location = userInput;
-                addAIMessage(`Great! Looking for properties in ${userInput}. What's your budget range? You can tell me your maximum price or a range.`);
-                showQuickResponses(['Under £250k', '£250k - £500k', '£500k - £1M', 'Over £1M']);
-                return;
-            }
-
-            // Step 2: Budget
-            if (conversationStep === 2) {
-                // Parse budget
-                if (lowerInput.includes('under') || lowerInput.includes('250')) {
-                    userPreferences.maxPrice = 250000;
-                } else if (lowerInput.includes('500')) {
-                    userPreferences.maxPrice = 500000;
-                } else if (lowerInput.includes('1m') || lowerInput.includes('million')) {
-                    userPreferences.maxPrice = 1000000;
+            // Handle initial question choice
+            if (lowerInput.includes('guide me')) {
+                const next = getNextQuestion();
+                if (next) {
+                    addAIMessage(next.question);
+                    showQuickResponses(next.suggestions);
                 }
-
-                addAIMessage("Perfect! How many bedrooms do you need?");
-                showQuickResponses(['1 bedroom', '2 bedrooms', '3 bedrooms', '4+ bedrooms']);
                 return;
             }
 
-            // Step 3: Bedrooms
-            if (conversationStep === 3) {
-                const bedroomMatch = userInput.match(/(\d+)/);
-                if (bedroomMatch) {
-                    userPreferences.bedrooms = parseInt(bedroomMatch[1]);
+            // Extract information from user input
+            const extracted = extractInformation(userInput);
+            const updated = updatePreferences(extracted);
+
+            // Build acknowledgment message
+            let response = "";
+            if (updated.length > 0) {
+                response = "Great! I've noted: " + updated.join(", ") + ". ";
+            }
+
+            // Check if we have enough to search or need more info
+            if (isSearchComplete()) {
+                const nextQ = getNextQuestion();
+                if (nextQ) {
+                    // Still have optional questions
+                    response += nextQ.question;
+                    addAIMessage(response);
+                    showQuickResponses(nextQ.suggestions);
+                } else {
+                    // All done!
+                    response += "Perfect! I have all the information I need to find your ideal properties. ";
+
+                    // Summarize what we have
+                    const summary = [];
+                    if (userPreferences.location) summary.push(`in ${userPreferences.location}`);
+                    if (userPreferences.bedrooms) summary.push(`${userPreferences.bedrooms} bedroom${userPreferences.bedrooms > 1 ? 's' : ''}`);
+                    if (userPreferences.propertyType) summary.push(userPreferences.propertyType.toLowerCase());
+                    if (userPreferences.maxPrice) summary.push(`up to £${(userPreferences.maxPrice / 1000).toFixed(0)}k`);
+
+                    if (summary.length > 0) {
+                        response += `I'll search for ${summary.join(', ')}`;
+                        if (userPreferences.features.length > 0) {
+                            response += ` with ${userPreferences.features.join(', ').toLowerCase()}`;
+                        }
+                        response += ". ";
+                    }
+
+                    response += "Click 'View Properties' to see the results!";
+                    addAIMessage(response);
+
+                    // Save preferences
+                    localStorage.setItem('propertySearchPreferences', JSON.stringify(userPreferences));
+                    localStorage.setItem('propertyConversationHistory', JSON.stringify(conversationHistory));
+
+                    document.getElementById('finishBtn').style.display = 'block';
+                    document.getElementById('userInput').disabled = true;
+                    document.getElementById('sendBtn').disabled = true;
                 }
-
-                addAIMessage("Excellent! What type of property are you interested in?");
-                showQuickResponses(['House', 'Flat/Apartment', 'Bungalow', 'Any type']);
-                return;
-            }
-
-            // Step 4: Property type
-            if (conversationStep === 4) {
-                userPreferences.propertyType = userInput;
-                addAIMessage("Great choice! Are there any specific features you're looking for? For example: garden, parking, near schools, good transport links, etc. Just tell me what's important to you, or say 'none' if you're flexible.");
-                showQuickResponses(['Garden', 'Parking', 'Near schools', 'Good transport', 'No specific features']);
-                return;
-            }
-
-            // Step 5: Features
-            if (conversationStep === 5) {
-                if (!lowerInput.includes('none') && !lowerInput.includes('no specific')) {
-                    userPreferences.features.push(userInput);
+            } else {
+                // Need more essential info
+                const nextQ = getNextQuestion();
+                if (nextQ) {
+                    response += nextQ.question;
+                    addAIMessage(response);
+                    showQuickResponses(nextQ.suggestions);
+                } else {
+                    // Shouldn't reach here, but handle gracefully
+                    addAIMessage("I have some information, but I need at least a location or bedroom count and budget to search. Can you provide more details?");
                 }
-
-                addAIMessage("Almost done! Tell me about your lifestyle or what you value in a neighborhood. For example: quiet area, vibrant nightlife, family-friendly, close to nature, etc.");
-                showQuickResponses(['Quiet area', 'Family-friendly', 'Close to nature', 'City center', 'Skip this']);
-                return;
-            }
-
-            // Step 6+: Collect additional info or finish
-            if (conversationStep >= 6) {
-                if (!lowerInput.includes('skip')) {
-                    userPreferences.lifestyle.push(userInput);
-                }
-
-                addAIMessage("Perfect! I have all the information I need to find your ideal properties. I'll search for properties that match your preferences. Click 'View Properties' to see the results!");
-
-                // Save preferences
-                localStorage.setItem('propertySearchPreferences', JSON.stringify(userPreferences));
-                localStorage.setItem('propertyConversationHistory', JSON.stringify(conversationHistory));
-
-                document.getElementById('finishBtn').style.display = 'block';
-                document.getElementById('userInput').disabled = true;
-                document.getElementById('sendBtn').disabled = true;
-                return;
             }
         }
 
