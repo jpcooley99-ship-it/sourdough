@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Search - Choose Your Method</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background-color: #f9f7f4;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        h1 {
+            color: #6b5744;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+            font-size: 1.1em;
+        }
+
+        .search-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .search-card {
+            background: white;
+            border: 3px solid #d4c5b0;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(107, 87, 68, 0.15);
+            border-color: #6b5744;
+        }
+
+        .search-card h2 {
+            color: #6b5744;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .search-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 1.05em;
+        }
+
+        .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .features {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .features li {
+            margin: 10px 0;
+            color: #555;
+            list-style-position: inside;
+        }
+
+        .cta-button {
+            background-color: #6b5744;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .cta-button:hover {
+            background-color: #524131;
+        }
+
+        .ai-card .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .ai-card .cta-button:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653b8e 100%);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #6b5744;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .search-options {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .search-card {
+                padding: 30px 20px;
+            }
+
+            .icon {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <h1>Find Your Perfect Property</h1>
+        <p class="subtitle">Choose how you'd like to search for properties</p>
+
+        <div class="search-options">
+            <!-- Normal Search Card -->
+            <div class="search-card" onclick="window.location.href='property-normal-search.html'">
+                <div class="icon">🔍</div>
+                <h2>Normal Search</h2>
+                <p>Traditional property search with filters and criteria</p>
+                <ul class="features">
+                    <li>Quick and familiar interface</li>
+                    <li>Filter by location, price, bedrooms</li>
+                    <li>Sort and refine results</li>
+                    <li>Advanced search options</li>
+                </ul>
+                <button class="cta-button">Start Normal Search</button>
+            </div>
+
+            <!-- AI Conversation Card -->
+            <div class="search-card ai-card" onclick="window.location.href='property-ai-chat.html'">
+                <div class="ai-badge">✨ AI POWERED</div>
+                <div class="icon">💬</div>
+                <h2>AI Conversation</h2>
+                <p>Have a natural conversation to find your ideal property</p>
+                <ul class="features">
+                    <li>Chat naturally about your needs</li>
+                    <li>AI understands your preferences</li>
+                    <li>Personalized recommendations</li>
+                    <li>Discover properties you might miss</li>
+                </ul>
+                <button class="cta-button">Start AI Conversation</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Property Search Conversation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background-color: #f9f7f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 3px solid #d4c5b0;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #6b5744;
+            font-size: 1.5em;
+        }
+
+        .ai-indicator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .back-link {
+            color: #6b5744;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            flex-shrink: 0;
+        }
+
+        .message.ai .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message.user .message-avatar {
+            background: #6b5744;
+        }
+
+        .message-content {
+            background: #f0f0f0;
+            padding: 12px 18px;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+
+        .message.ai .message-content {
+            background: linear-gradient(135deg, #e8eaff 0%, #f0e6ff 100%);
+            border: 1px solid #d4d4ff;
+        }
+
+        .message.user .message-content {
+            background: #6b5744;
+            color: white;
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 2px solid #d4c5b0;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #d4c5b0;
+            border-radius: 25px;
+            font-size: 1em;
+            font-family: Georgia, serif;
+            outline: none;
+        }
+
+        #userInput:focus {
+            border-color: #6b5744;
+        }
+
+        .send-btn {
+            background-color: #6b5744;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: Georgia, serif;
+            transition: background-color 0.3s ease;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background-color: #524131;
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .finish-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .finish-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #e8eaff 0%, #f0e6ff 100%);
+            border: 1px solid #d4d4ff;
+            border-radius: 18px;
+            width: fit-content;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .quick-responses {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-response {
+            background: white;
+            border: 2px solid #d4c5b0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .quick-response:hover {
+            background: #6b5744;
+            color: white;
+            border-color: #6b5744;
+        }
+
+        @media (max-width: 768px) {
+            .messages {
+                padding: 15px;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .header h1 {
+                font-size: 1.2em;
+            }
+
+            .ai-indicator {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <a href="property-search.html" class="back-link">← Back</a>
+            <span style="color: #6b5744; font-size: 1.2em;">AI Property Search</span>
+        </div>
+        <div class="ai-indicator">✨ AI Assistant Active</div>
+    </div>
+
+    <div class="chat-container">
+        <div class="messages" id="messages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Type your message or tell me what you're looking for..."
+                    autocomplete="off"
+                >
+                <button class="send-btn" id="sendBtn">Send</button>
+                <button class="finish-btn" id="finishBtn">View Properties</button>
+            </div>
+            <div class="quick-responses" id="quickResponses" style="display: none;">
+                <!-- Quick responses will be added dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let conversationHistory = [];
+        let userPreferences = {
+            location: null,
+            minPrice: null,
+            maxPrice: null,
+            bedrooms: null,
+            propertyType: null,
+            features: [],
+            lifestyle: []
+        };
+
+        // Initialize chat
+        function init() {
+            addAIMessage("Hello! I'm your AI property assistant. I'll help you find your perfect property through a natural conversation. Let me ask you a few questions to understand what you're looking for. Where would you like to live?");
+            showQuickResponses(['London', 'Manchester', 'Birmingham', 'Other location']);
+        }
+
+        // Add message to chat
+        function addMessage(content, isUser = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = isUser ? '👤' : '🤖';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = content;
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+
+            // Scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            return messageDiv;
+        }
+
+        function addUserMessage(content) {
+            conversationHistory.push({ role: 'user', content });
+            addMessage(content, true);
+        }
+
+        function addAIMessage(content) {
+            conversationHistory.push({ role: 'ai', content });
+            addMessage(content, false);
+        }
+
+        // Show typing indicator
+        function showTyping() {
+            const messagesDiv = document.getElementById('messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typing';
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = '🤖';
+
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator active';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(indicator);
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        // Quick responses
+        function showQuickResponses(responses) {
+            const quickDiv = document.getElementById('quickResponses');
+            quickDiv.innerHTML = '';
+            quickDiv.style.display = responses.length > 0 ? 'flex' : 'none';
+
+            responses.forEach(response => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-response';
+                btn.textContent = response;
+                btn.onclick = () => handleQuickResponse(response);
+                quickDiv.appendChild(btn);
+            });
+        }
+
+        function handleQuickResponse(response) {
+            handleUserInput(response);
+            showQuickResponses([]);
+        }
+
+        // AI response logic
+        let conversationStep = 0;
+
+        function handleUserInput(input) {
+            if (!input.trim()) return;
+
+            addUserMessage(input);
+            document.getElementById('userInput').value = '';
+            showQuickResponses([]);
+
+            showTyping();
+
+            setTimeout(() => {
+                hideTyping();
+                generateAIResponse(input);
+            }, 1000 + Math.random() * 1000);
+        }
+
+        function generateAIResponse(userInput) {
+            conversationStep++;
+            const lowerInput = userInput.toLowerCase();
+
+            // Step 1: Location
+            if (conversationStep === 1) {
+                userPreferences.location = userInput;
+                addAIMessage(`Great! Looking for properties in ${userInput}. What's your budget range? You can tell me your maximum price or a range.`);
+                showQuickResponses(['Under £250k', '£250k - £500k', '£500k - £1M', 'Over £1M']);
+                return;
+            }
+
+            // Step 2: Budget
+            if (conversationStep === 2) {
+                // Parse budget
+                if (lowerInput.includes('under') || lowerInput.includes('250')) {
+                    userPreferences.maxPrice = 250000;
+                } else if (lowerInput.includes('500')) {
+                    userPreferences.maxPrice = 500000;
+                } else if (lowerInput.includes('1m') || lowerInput.includes('million')) {
+                    userPreferences.maxPrice = 1000000;
+                }
+
+                addAIMessage("Perfect! How many bedrooms do you need?");
+                showQuickResponses(['1 bedroom', '2 bedrooms', '3 bedrooms', '4+ bedrooms']);
+                return;
+            }
+
+            // Step 3: Bedrooms
+            if (conversationStep === 3) {
+                const bedroomMatch = userInput.match(/(\d+)/);
+                if (bedroomMatch) {
+                    userPreferences.bedrooms = parseInt(bedroomMatch[1]);
+                }
+
+                addAIMessage("Excellent! What type of property are you interested in?");
+                showQuickResponses(['House', 'Flat/Apartment', 'Bungalow', 'Any type']);
+                return;
+            }
+
+            // Step 4: Property type
+            if (conversationStep === 4) {
+                userPreferences.propertyType = userInput;
+                addAIMessage("Great choice! Are there any specific features you're looking for? For example: garden, parking, near schools, good transport links, etc. Just tell me what's important to you, or say 'none' if you're flexible.");
+                showQuickResponses(['Garden', 'Parking', 'Near schools', 'Good transport', 'No specific features']);
+                return;
+            }
+
+            // Step 5: Features
+            if (conversationStep === 5) {
+                if (!lowerInput.includes('none') && !lowerInput.includes('no specific')) {
+                    userPreferences.features.push(userInput);
+                }
+
+                addAIMessage("Almost done! Tell me about your lifestyle or what you value in a neighborhood. For example: quiet area, vibrant nightlife, family-friendly, close to nature, etc.");
+                showQuickResponses(['Quiet area', 'Family-friendly', 'Close to nature', 'City center', 'Skip this']);
+                return;
+            }
+
+            // Step 6+: Collect additional info or finish
+            if (conversationStep >= 6) {
+                if (!lowerInput.includes('skip')) {
+                    userPreferences.lifestyle.push(userInput);
+                }
+
+                addAIMessage("Perfect! I have all the information I need to find your ideal properties. I'll search for properties that match your preferences. Click 'View Properties' to see the results!");
+
+                // Save preferences
+                localStorage.setItem('propertySearchPreferences', JSON.stringify(userPreferences));
+                localStorage.setItem('propertyConversationHistory', JSON.stringify(conversationHistory));
+
+                document.getElementById('finishBtn').style.display = 'block';
+                document.getElementById('userInput').disabled = true;
+                document.getElementById('sendBtn').disabled = true;
+                return;
+            }
+        }
+
+        // Event listeners
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            const input = document.getElementById('userInput').value;
+            handleUserInput(input);
+        });
+
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('userInput').value;
+                handleUserInput(input);
+            }
+        });
+
+        document.getElementById('finishBtn').addEventListener('click', () => {
+            window.location.href = 'property-results.html';
+        });
+
+        // Hide finish button initially
+        document.getElementById('finishBtn').style.display = 'none';
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>

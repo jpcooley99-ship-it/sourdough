@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Search Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background-color: #f9f7f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 3px solid #d4c5b0;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #6b5744;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            color: #6b5744;
+            text-decoration: none;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .search-summary {
+            background: linear-gradient(135deg, #e8eaff 0%, #f0e6ff 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #d4d4ff;
+        }
+
+        .search-summary h3 {
+            color: #6b5744;
+            margin-bottom: 10px;
+        }
+
+        .search-summary p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .preference-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-count {
+            color: #6b5744;
+            font-size: 1.2em;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sort-controls label {
+            color: #6b5744;
+        }
+
+        .sort-controls select {
+            padding: 8px 15px;
+            border: 2px solid #d4c5b0;
+            border-radius: 8px;
+            font-family: Georgia, serif;
+            background: white;
+            cursor: pointer;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .property-card {
+            background: white;
+            border: 3px solid #d4c5b0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(107, 87, 68, 0.15);
+            border-color: #6b5744;
+        }
+
+        .property-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #d4c5b0 0%, #a89988 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            position: relative;
+        }
+
+        .ai-recommended {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.3em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .property-details {
+            padding: 20px;
+        }
+
+        .property-price {
+            color: #6b5744;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .property-address {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .property-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .property-highlights {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .highlight {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #555;
+        }
+
+        .view-details-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6b5744;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: Georgia, serif;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background-color: #524131;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 3px solid #d4c5b0;
+        }
+
+        .no-results h2 {
+            color: #6b5744;
+            margin-bottom: 15px;
+        }
+
+        .no-results p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .new-search-btn {
+            background-color: #6b5744;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-family: Georgia, serif;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .new-search-btn:hover {
+            background-color: #524131;
+        }
+
+        @media (max-width: 768px) {
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="property-search.html" class="back-link">← Back to Search</a>
+            <h1>Property Search Results</h1>
+
+            <div class="search-summary" id="searchSummary">
+                <!-- Summary will be inserted here -->
+            </div>
+        </div>
+
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">
+                Loading properties...
+            </div>
+            <div class="sort-controls">
+                <label>Sort by:</label>
+                <select id="sortSelect">
+                    <option value="recommended">AI Recommended</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="bedrooms">Bedrooms</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid">
+            <!-- Properties will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Mock property database
+        const allProperties = [
+            {
+                id: 1,
+                price: 325000,
+                address: "45 Oak Avenue, London",
+                location: "London",
+                bedrooms: 3,
+                bathrooms: 2,
+                type: "House",
+                description: "A charming Victorian terraced house with original features and a lovely rear garden.",
+                features: ["Garden", "Parking", "Near schools"],
+                sqft: 1250,
+                icon: "🏡"
+            },
+            {
+                id: 2,
+                price: 425000,
+                address: "12 Riverside Court, London",
+                location: "London",
+                bedrooms: 2,
+                bathrooms: 2,
+                type: "Flat",
+                description: "Modern riverside apartment with stunning views and excellent transport links.",
+                features: ["Good transport", "Balcony", "Concierge"],
+                sqft: 950,
+                icon: "🏢"
+            },
+            {
+                id: 3,
+                price: 275000,
+                address: "8 Maple Close, Manchester",
+                location: "Manchester",
+                bedrooms: 3,
+                bathrooms: 1,
+                type: "House",
+                description: "Perfect family home in a quiet residential area with excellent schools nearby.",
+                features: ["Garden", "Near schools", "Garage"],
+                sqft: 1100,
+                icon: "🏠"
+            },
+            {
+                id: 4,
+                price: 189000,
+                address: "Flat 4, Cedar House, Birmingham",
+                location: "Birmingham",
+                bedrooms: 2,
+                bathrooms: 1,
+                type: "Flat",
+                description: "Stylish apartment in vibrant city center location with all amenities close by.",
+                features: ["City center", "Good transport", "Lift access"],
+                sqft: 750,
+                icon: "🏢"
+            },
+            {
+                id: 5,
+                price: 495000,
+                address: "23 Willow Gardens, London",
+                location: "London",
+                bedrooms: 4,
+                bathrooms: 3,
+                type: "House",
+                description: "Spacious family home with large garden, driveway parking, and home office.",
+                features: ["Garden", "Parking", "Home office", "Near schools"],
+                sqft: 1800,
+                icon: "🏡"
+            },
+            {
+                id: 6,
+                price: 365000,
+                address: "101 Park View, London",
+                location: "London",
+                bedrooms: 3,
+                bathrooms: 2,
+                type: "Flat",
+                description: "Bright and airy apartment overlooking a beautiful park with great local amenities.",
+                features: ["Park view", "Good transport", "Parking"],
+                sqft: 1050,
+                icon: "🏢"
+            },
+            {
+                id: 7,
+                price: 215000,
+                address: "56 Elm Street, Manchester",
+                location: "Manchester",
+                bedrooms: 2,
+                bathrooms: 1,
+                type: "House",
+                description: "Cozy starter home in friendly neighborhood with good schools and transport links.",
+                features: ["Garden", "Near schools", "Good transport"],
+                sqft: 850,
+                icon: "🏠"
+            },
+            {
+                id: 8,
+                price: 785000,
+                address: "The Penthouse, Tower Bridge Wharf, London",
+                location: "London",
+                bedrooms: 3,
+                bathrooms: 3,
+                type: "Flat",
+                description: "Luxury penthouse with panoramic city views, concierge service, and premium finishes.",
+                features: ["City views", "Concierge", "Gym", "Parking"],
+                sqft: 1650,
+                icon: "🏙️"
+            },
+            {
+                id: 9,
+                price: 445000,
+                address: "18 Orchard Lane, London",
+                location: "London",
+                bedrooms: 4,
+                bathrooms: 2,
+                type: "House",
+                description: "Extended family home with modern kitchen, conservatory, and well-maintained garden.",
+                features: ["Garden", "Parking", "Conservatory", "Near schools"],
+                sqft: 1550,
+                icon: "🏡"
+            },
+            {
+                id: 10,
+                price: 299000,
+                address: "7 The Mews, Birmingham",
+                location: "Birmingham",
+                bedrooms: 3,
+                bathrooms: 2,
+                type: "House",
+                description: "Contemporary townhouse in sought-after development with allocated parking.",
+                features: ["Parking", "Good transport", "Modern"],
+                sqft: 1150,
+                icon: "🏠"
+            }
+        ];
+
+        let filteredProperties = [];
+        let userPreferences = {};
+
+        // Load user preferences
+        function loadPreferences() {
+            const savedPrefs = localStorage.getItem('propertySearchPreferences');
+            if (savedPrefs) {
+                userPreferences = JSON.parse(savedPrefs);
+                displaySearchSummary();
+                filterAndDisplayProperties();
+            } else {
+                // No preferences saved, show all properties
+                filteredProperties = allProperties;
+                displayProperties();
+                document.getElementById('resultsCount').textContent = `${filteredProperties.length} properties found`;
+            }
+        }
+
+        // Display search summary
+        function displaySearchSummary() {
+            const summaryDiv = document.getElementById('searchSummary');
+
+            let summaryHTML = '<h3>🎯 Your Search Criteria</h3><p>';
+
+            if (userPreferences.location) {
+                summaryHTML += `Location: <strong>${userPreferences.location}</strong> • `;
+            }
+            if (userPreferences.bedrooms) {
+                summaryHTML += `${userPreferences.bedrooms} bedrooms • `;
+            }
+            if (userPreferences.maxPrice) {
+                summaryHTML += `Budget: Up to £${(userPreferences.maxPrice / 1000).toFixed(0)}k • `;
+            }
+            if (userPreferences.propertyType) {
+                summaryHTML += `Type: ${userPreferences.propertyType}`;
+            }
+
+            summaryHTML += '</p><div class="preference-tags">';
+
+            if (userPreferences.features && userPreferences.features.length > 0) {
+                userPreferences.features.forEach(feature => {
+                    summaryHTML += `<span class="tag">${feature}</span>`;
+                });
+            }
+
+            if (userPreferences.lifestyle && userPreferences.lifestyle.length > 0) {
+                userPreferences.lifestyle.forEach(item => {
+                    summaryHTML += `<span class="tag">${item}</span>`;
+                });
+            }
+
+            summaryHTML += '</div>';
+            summaryDiv.innerHTML = summaryHTML;
+        }
+
+        // Filter properties based on preferences
+        function filterAndDisplayProperties() {
+            filteredProperties = allProperties.filter(property => {
+                // Filter by location
+                if (userPreferences.location &&
+                    !property.location.toLowerCase().includes(userPreferences.location.toLowerCase()) &&
+                    !userPreferences.location.toLowerCase().includes('any') &&
+                    !userPreferences.location.toLowerCase().includes('flexible')) {
+                    return false;
+                }
+
+                // Filter by price
+                if (userPreferences.maxPrice && property.price > userPreferences.maxPrice) {
+                    return false;
+                }
+
+                // Filter by bedrooms
+                if (userPreferences.bedrooms && property.bedrooms < userPreferences.bedrooms) {
+                    return false;
+                }
+
+                // Filter by property type
+                if (userPreferences.propertyType &&
+                    !property.type.toLowerCase().includes(userPreferences.propertyType.toLowerCase()) &&
+                    !userPreferences.propertyType.toLowerCase().includes('any')) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            // Calculate AI match scores
+            filteredProperties.forEach(property => {
+                let score = 0;
+
+                // Bonus for matching features
+                if (userPreferences.features) {
+                    userPreferences.features.forEach(feature => {
+                        if (property.features.some(f => f.toLowerCase().includes(feature.toLowerCase()))) {
+                            score += 2;
+                        }
+                    });
+                }
+
+                // Bonus for being in desired location
+                if (userPreferences.location &&
+                    property.location.toLowerCase() === userPreferences.location.toLowerCase()) {
+                    score += 3;
+                }
+
+                // Bonus for exact bedroom match
+                if (property.bedrooms === userPreferences.bedrooms) {
+                    score += 2;
+                }
+
+                property.aiScore = score;
+                property.isRecommended = score >= 4;
+            });
+
+            // Sort by AI score initially
+            filteredProperties.sort((a, b) => b.aiScore - a.aiScore);
+
+            displayProperties();
+            document.getElementById('resultsCount').textContent =
+                `${filteredProperties.length} ${filteredProperties.length === 1 ? 'property' : 'properties'} found`;
+        }
+
+        // Display properties
+        function displayProperties() {
+            const grid = document.getElementById('propertiesGrid');
+
+            if (filteredProperties.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <h2>No properties found</h2>
+                        <p>We couldn't find any properties matching your exact criteria. Try adjusting your search preferences.</p>
+                        <button class="new-search-btn" onclick="window.location.href='property-ai-chat.html'">Start New Search</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = '';
+
+            filteredProperties.forEach(property => {
+                const card = document.createElement('div');
+                card.className = 'property-card';
+
+                card.innerHTML = `
+                    <div class="property-image">
+                        ${property.icon}
+                        ${property.isRecommended ? '<div class="ai-recommended">✨ AI Recommended</div>' : ''}
+                    </div>
+                    <div class="property-details">
+                        <div class="property-price">£${property.price.toLocaleString()}</div>
+                        <div class="property-address">${property.address}</div>
+                        <div class="property-features">
+                            <div class="feature">🛏️ ${property.bedrooms} bed</div>
+                            <div class="feature">🚿 ${property.bathrooms} bath</div>
+                            <div class="feature">📏 ${property.sqft} sqft</div>
+                        </div>
+                        <div class="property-description">${property.description}</div>
+                        <div class="property-highlights">
+                            ${property.features.map(f => `<span class="highlight">${f}</span>`).join('')}
+                        </div>
+                        <button class="view-details-btn" onclick="viewProperty(${property.id})">View Details</button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Sorting
+        document.getElementById('sortSelect').addEventListener('change', (e) => {
+            const sortType = e.target.value;
+
+            switch(sortType) {
+                case 'recommended':
+                    filteredProperties.sort((a, b) => b.aiScore - a.aiScore);
+                    break;
+                case 'price-low':
+                    filteredProperties.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProperties.sort((a, b) => b.price - a.price);
+                    break;
+                case 'bedrooms':
+                    filteredProperties.sort((a, b) => b.bedrooms - a.bedrooms);
+                    break;
+            }
+
+            displayProperties();
+        });
+
+        // View property details (placeholder)
+        function viewProperty(id) {
+            alert(`Property details for ID ${id} would open here. This would link to a detailed property page.`);
+        }
+
+        // Initialize
+        loadPreferences();
+    </script>
+</body>
+</html>
